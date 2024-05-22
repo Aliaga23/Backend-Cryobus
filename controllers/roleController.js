@@ -5,7 +5,7 @@ const getRoles = async (req, res) => {
     const roles = await RoleModel.getAllRoles();
     res.json(roles);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
