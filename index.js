@@ -12,6 +12,7 @@ const rolConductorRoutes = require('./routes/rolConductorRoutes');
 const clienteRoutes = require('./routes/clienteRoutes');
 const itemRoutes = require('./routes/itemRoutes');
 const paqueteRoutes = require('./routes/paqueteRoutes');
+const notaEntregaRoutes = require( './routes/notaEntregaRoutes.js');
 
 const cors = require('cors');
 const { pool } = require('./db');
