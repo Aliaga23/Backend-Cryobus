@@ -9,6 +9,9 @@ const permisoRolRoutes = require('./routes/permisoRolRoutes');
 const permisoRoutes = require('./routes/permisoRoutes');
 const tipoEnvioRoutes = require('./routes/tipoEnvioRoutes');
 const rolConductorRoutes = require('./routes/rolConductorRoutes');
+const clienteRoutes = require('./routes/clienteRoutes');
+const itemRoutes = require('./routes/itemRoutes');
+const paqueteRoutes = require('./routes/paqueteRoutes');
 
 const cors = require('cors');
 const { pool } = require('./db');
@@ -32,6 +35,9 @@ app.use('/api/permisoRol', permisoRolRoutes);
 app.use('/api/permisos', permisoRoutes);
 app.use('/api/tipoEnvio', tipoEnvioRoutes);
 app.use('/api/rolConductor', rolConductorRoutes);
+app.use('/api/clientes', clienteRoutes);
+app.use('/api/items', itemRoutes);
+app.use('/api/paquetes', paqueteRoutes);
 
 app.get('/ping', async (req, res) => {
   try {
