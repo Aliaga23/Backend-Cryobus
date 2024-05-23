@@ -1,6 +1,14 @@
 // models/userModel.js
 const { pool } = require('../db');
-const bcrypt = require('bcrypt');
+
+const getAllUsers = async () => {
+  try {
+    const [rows] = await pool.query('SELECT * FROM USUARIO');
+    return rows;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
 
 const getUserById = async (id) => {
   try {
@@ -13,9 +21,8 @@ const getUserById = async (id) => {
 
 const createUser = async (user) => {
   const { id, apellidos, nombres, contra, idRol } = user;
-  const hashedPassword = await bcrypt.hash(contra, 10);
   try {
-    await pool.query('INSERT INTO USUARIO (ID, CONTRA, APELLIDOS, NOMBRES, IDROL) VALUES (?, ?, ?, ?, ?)', [id, hashedPassword, apellidos, nombres, idRol]);
+    await pool.query('INSERT INTO USUARIO (ID, CONTRA, APELLIDOS, NOMBRES, IDROL) VALUES (?, ?, ?, ?, ?)', [id, contra, apellidos, nombres, idRol]);
   } catch (error) {
     throw new Error(error.message);
   }
@@ -23,9 +30,8 @@ const createUser = async (user) => {
 
 const updateUser = async (id, user) => {
   const { apellidos, nombres, contra, idRol } = user;
-  const hashedPassword = await bcrypt.hash(contra, 10);
   try {
-    await pool.query('UPDATE USUARIO SET CONTRA = ?, APELLIDOS = ?, NOMBRES = ?, IDROL = ? WHERE ID = ?', [hashedPassword, apellidos, nombres, idRol, id]);
+    await pool.query('UPDATE USUARIO SET CONTRA = ?, APELLIDOS = ?, NOMBRES = ?, IDROL = ? WHERE ID = ?', [contra, apellidos, nombres, idRol, id]);
   } catch (error) {
     throw new Error(error.message);
   }
@@ -40,8 +46,9 @@ const deleteUser = async (id) => {
 };
 
 module.exports = {
+  getAllUsers,
   getUserById,
   createUser,
   updateUser,
-  deleteUser,
+  deleteUser
 };
