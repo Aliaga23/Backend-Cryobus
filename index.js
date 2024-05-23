@@ -15,7 +15,7 @@ const { pool } = require('./db');
 const app = express();
 
 const allowedOrigins = [
-  
+  'http://localhost:3000', // Permitir solicitudes desde localhost
   'https://proyecto-production-ccb8.up.railway.app' // Permitir solicitudes desde el frontend desplegado en Railway
 ];
 
