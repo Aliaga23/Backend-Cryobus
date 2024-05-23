@@ -1,14 +1,19 @@
 // routes/recepcionRoutes.js
 const express = require('express');
-const router = express.Router();
-const recepcionController = require('../controllers/recepcionController');
+const {
+  getAllRecepciones,
+  getRecepcionById,
+  createRecepcion,
+  updateRecepcion,
+  deleteRecepcion
+} = require('../controllers/recepcionController');
 
-router.get('/', recepcionController.getRecepciones);
-router.get('/:nro', recepcionController.getRecepcionById);
-router.post('/', recepcionController.createRecepcion);
-router.put('/:nro', recepcionController.updateRecepcion);
-router.delete('/:nro', recepcionController.deleteRecepcion);
-router.get('/clientes', recepcionController.getClientes);
-router.get('/paquetes', recepcionController.getPaquetes);
+const router = express.Router();
+
+router.get('/', getAllRecepciones);
+router.get('/:id', getRecepcionById);
+router.post('/', createRecepcion);
+router.put('/:id', updateRecepcion);
+router.delete('/:id', deleteRecepcion);
 
 module.exports = router;
