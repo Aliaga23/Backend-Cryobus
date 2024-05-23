@@ -14,6 +14,7 @@ const itemRoutes = require('./routes/itemRoutes');
 const paqueteRoutes = require('./routes/paqueteRoutes');
 const notaEntregaRoutes = require( './routes/notaEntregaRoutes.js');
 const recepcionRoutes = require('./routes/recepcionRouter');
+const estadoEntregaRoutes = require('./routes/estadoEntregaRoutes');
 
 const cors = require('cors');
 const { pool } = require('./db');
@@ -42,6 +43,7 @@ app.use('/api/items', itemRoutes);
 app.use('/api/paquetes', paqueteRoutes);
 app.use('/api/notasEntrega', notaEntregaRoutes);
 app.use('/api/recepciones', recepcionRoutes);
+app.use('/api/estadosEntrega', estadoEntregaRoutes);
 
 app.get('/ping', async (req, res) => {
   try {

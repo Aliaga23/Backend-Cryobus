@@ -59,6 +59,46 @@ const deleteNotaEntrega = async (req, res) => {
     res.status(500).json({ error: 'Error al eliminar la nota de entrega' });
   }
 };
+const getClientes = async (req, res) => {
+    try {
+      const [rows] = await pool.query('SELECT * FROM CLIENTE');
+      res.json(rows);
+    } catch (error) {
+      console.error('Error al obtener los clientes:', error);
+      res.status(500).json({ error: 'Error al obtener los clientes' });
+    }
+  };
+  
+  const getTiposEnvio = async (req, res) => {
+    try {
+      const [rows] = await pool.query('SELECT * FROM TIPOENVIO');
+      res.json(rows);
+    } catch (error) {
+      console.error('Error al obtener los tipos de envío:', error);
+      res.status(500).json({ error: 'Error al obtener los tipos de envío' });
+    }
+  };
+  
+  const getEstadosEntrega = async (req, res) => {
+    try {
+      const [rows] = await pool.query('SELECT * FROM ESTADOENTREGA');
+      res.json(rows);
+    } catch (error) {
+      console.error('Error al obtener los estados de entrega:', error);
+      res.status(500).json({ error: 'Error al obtener los estados de entrega' });
+    }
+  };
+  
+  const getPaquetes = async (req, res) => {
+    try {
+      const [rows] = await pool.query('SELECT * FROM PAQUETE');
+      res.json(rows);
+    } catch (error) {
+      console.error('Error al obtener los paquetes:', error);
+      res.status(500).json({ error: 'Error al obtener los paquetes' });
+    }
+  };
+
 
 module.exports = {
   getNotasEntrega,
@@ -66,4 +106,8 @@ module.exports = {
   createNotaEntrega,
   updateNotaEntrega,
   deleteNotaEntrega,
+  getClientes,
+  getTiposEnvio,
+  getEstadosEntrega,
+  getPaquetes
 };
