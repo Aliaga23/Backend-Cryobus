@@ -1,19 +1,12 @@
-// routes/notasEntregaRoutes.js
+// routes/notaEntregaRoutes.js
+
 const express = require('express');
-const {
-  getAllNotasEntrega,
-  getNotaEntregaById,
-  createNotaEntrega,
-  updateNotaEntrega,
-  deleteNotaEntrega,
-} = require('../controllers/notaEntregaController');
-
 const router = express.Router();
+const notaEntregaController = require('../controllers/notaEntregaController');
 
-router.get('/', getAllNotasEntrega);
-router.get('/:id', getNotaEntregaById);
-router.post('/', createNotaEntrega);
-router.put('/:id', updateNotaEntrega);
-router.delete('/:id', deleteNotaEntrega);
+router.get('/', notaEntregaController.getAllNotasEntrega);
+router.post('/', notaEntregaController.createNotaEntrega);
+router.put('/:id', notaEntregaController.updateNotaEntrega);
+router.delete('/:id', notaEntregaController.deleteNotaEntrega);
 
 module.exports = router;
