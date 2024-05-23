@@ -1,61 +1,136 @@
-// controllers/notaEntregaController.js
-const notaEntregaModel = require('../models/notaEntregaModel');
+// controllers/notasEntregaController.js
+const pool = require('../db');
 
-const getNotasEntrega = async (req, res) => {
+const getAllNotasEntrega = async (req, res) => {
   try {
-    const notasEntrega = await notaEntregaModel.getAllNotasEntrega();
-    res.json(notasEntrega);
+    const [results] = await pool.query('SELECT * FROM NOTAENTREGA');
+    res.json(results);
   } catch (error) {
-    res.status(500).json({ error: 'Error al obtener las notas de entrega' });
+    console.error('Error getting notas de entrega:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
-const getNotaEntrega = async (req, res) => {
+const getNotaEntregaById = async (req, res) => {
+  const { id } = req.params;
   try {
-    const { id } = req.params;
-    const notaEntrega = await notaEntregaModel.getNotaEntregaById(id);
-    if (notaEntrega) {
-      res.json(notaEntrega);
-    } else {
-      res.status(404).json({ error: 'Nota de entrega no encontrada' });
+    const [results] = await pool.query('SELECT * FROM NOTAENTREGA WHERE NRO = ?', [id]);
+    if (results.length === 0) {
+      return res.status(404).json({ error: 'Nota de Entrega not found' });
     }
+    res.json(results[0]);
   } catch (error) {
-    res.status(500).json({ error: 'Error al obtener la nota de entrega' });
+    console.error('Error getting nota de entrega by ID:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
 const createNotaEntrega = async (req, res) => {
+  const {
+    FECHARECEPCION,
+    HORARECEPCION,
+    FECHAENTREGA,
+    HORAENTREGA,
+    PRECIOESTIMADO,
+    CODIGOCLIENTEENVIA,
+    CODIGOCLIENTERECIBE,
+    IDUSUARIOENVIA,
+    IDUSUARIORECIBE,
+    IDTIPOENVIO,
+    IDESTADOENTREGA,
+    NROREEMBOLSO,
+    CODIGOPAQUETE,
+    NRONOTATRASLADO,
+  } = req.body;
+
   try {
-    const notaEntregaId = await notaEntregaModel.createNotaEntrega(req.body);
-    res.status(201).json({ id: notaEntregaId });
+    const [result] = await pool.query(
+      'INSERT INTO NOTAENTREGA (FECHARECEPCION, HORARECEPCION, FECHAENTREGA, HORAENTREGA, PRECIOESTIMADO, CODIGOCLIENTEENVIA, CODIGOCLIENTERECIBE, IDUSUARIOENVIA, IDUSUARIORECIBE, IDTIPOENVIO, IDESTADOENTREGA, NROREEMBOLSO, CODIGOPAQUETE, NRONOTATRASLADO) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+      [
+        FECHARECEPCION,
+        HORARECEPCION,
+        FECHAENTREGA,
+        HORAENTREGA,
+        PRECIOESTIMADO,
+        CODIGOCLIENTEENVIA,
+        CODIGOCLIENTERECIBE,
+        IDUSUARIOENVIA,
+        IDUSUARIORECIBE,
+        IDTIPOENVIO,
+        IDESTADOENTREGA,
+        NROREEMBOLSO,
+        CODIGOPAQUETE,
+        NRONOTATRASLADO,
+      ]
+    );
+    res.status(201).json({ id: result.insertId });
   } catch (error) {
-    res.status(500).json({ error: 'Error al crear la nota de entrega' });
+    console.error('Error creating nota de entrega:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
 const updateNotaEntrega = async (req, res) => {
+  const { id } = req.params;
+  const {
+    FECHARECEPCION,
+    HORARECEPCION,
+    FECHAENTREGA,
+    HORAENTREGA,
+    PRECIOESTIMADO,
+    CODIGOCLIENTEENVIA,
+    CODIGOCLIENTERECIBE,
+    IDUSUARIOENVIA,
+    IDUSUARIORECIBE,
+    IDTIPOENVIO,
+    IDESTADOENTREGA,
+    NROREEMBOLSO,
+    CODIGOPAQUETE,
+    NRONOTATRASLADO,
+  } = req.body;
+
   try {
-    const { id } = req.params;
-    await notaEntregaModel.updateNotaEntrega(id, req.body);
-    res.status(204).end();
+    await pool.query(
+      'UPDATE NOTAENTREGA SET FECHARECEPCION = ?, HORARECEPCION = ?, FECHAENTREGA = ?, HORAENTREGA = ?, PRECIOESTIMADO = ?, CODIGOCLIENTEENVIA = ?, CODIGOCLIENTERECIBE = ?, IDUSUARIOENVIA = ?, IDUSUARIORECIBE = ?, IDTIPOENVIO = ?, IDESTADOENTREGA = ?, NROREEMBOLSO = ?, CODIGOPAQUETE = ?, NRONOTATRASLADO = ? WHERE NRO = ?',
+      [
+        FECHARECEPCION,
+        HORARECEPCION,
+        FECHAENTREGA,
+        HORAENTREGA,
+        PRECIOESTIMADO,
+        CODIGOCLIENTEENVIA,
+        CODIGOCLIENTERECIBE,
+        IDUSUARIOENVIA,
+        IDUSUARIORECIBE,
+        IDTIPOENVIO,
+        IDESTADOENTREGA,
+        NROREEMBOLSO,
+        CODIGOPAQUETE,
+        NRONOTATRASLADO,
+        id,
+      ]
+    );
+    res.status(200).json({ message: 'Nota de Entrega updated successfully' });
   } catch (error) {
-    res.status(500).json({ error: 'Error al actualizar la nota de entrega' });
+    console.error('Error updating nota de entrega:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
 const deleteNotaEntrega = async (req, res) => {
+  const { id } = req.params;
   try {
-    const { id } = req.params;
-    await notaEntregaModel.deleteNotaEntrega(id);
-    res.status(204).end();
+    await pool.query('DELETE FROM NOTAENTREGA WHERE NRO = ?', [id]);
+    res.status(200).json({ message: 'Nota de Entrega deleted successfully' });
   } catch (error) {
-    res.status(500).json({ error: 'Error al eliminar la nota de entrega' });
+    console.error('Error deleting nota de entrega:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
 module.exports = {
-  getNotasEntrega,
-  getNotaEntrega,
+  getAllNotasEntrega,
+  getNotaEntregaById,
   createNotaEntrega,
   updateNotaEntrega,
   deleteNotaEntrega,
