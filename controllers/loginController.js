@@ -15,7 +15,11 @@ const loginUser = async (req, res) => {
       return res.status(401).json({ error: 'Usuario o contraseña incorrectos' });
     }
 
-    res.json({ message: 'Login exitoso', user: { id: user.ID, apellidos: user.APELLIDOS, nombres: user.NOMBRES, roles: user.IDROL } });
+    res.json({
+      message: 'Login exitoso',
+      user: { id: req.user.id, apellidos: req.user.apellidos, nombres: req.user.nombres },
+      role: req.user.role
+    });
     
   } catch (error) {
     console.error('Error en loginUser:', error.message); // Añadir log del error
