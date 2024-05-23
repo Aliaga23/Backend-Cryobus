@@ -15,6 +15,7 @@ const paqueteRoutes = require('./routes/paqueteRoutes');
 const notaEntregaRoutes = require( './routes/notaEntregaRoutes.js');
 const recepcionRoutes = require('./routes/recepcionRouter');
 const estadoEntregaRoutes = require('./routes/estadoEntregaRoutes');
+const bitacoraRoutes = require('./routes/bitacoraRoute'); // Nueva ruta
 
 const cors = require('cors');
 const { pool } = require('./db');
@@ -46,6 +47,7 @@ app.use('/api/paquetes', paqueteRoutes);
 app.use('/api/notasEntrega', notaEntregaRoutes);
 app.use('/api/recepciones', recepcionRoutes);
 app.use('/api/estadosEntrega', estadoEntregaRoutes);
+app.use('/api/bitacora', bitacoraRoutes); // Nueva ruta
 
 app.get('/ping', async (req, res) => {
   try {
