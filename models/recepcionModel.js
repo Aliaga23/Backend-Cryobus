@@ -2,12 +2,12 @@
 const { pool } = require('../db');
 
 const getAllRecepciones = async () => {
-  const [rows] = await pool.query('SELECT * FROM NOTAENTREGA');
+  const [rows] = await pool.query('SELECT NRO, FECHARECEPCION, HORARECEPCION, PRECIOESTIMADO, CODIGOCLIENTEENVIA, CODIGOPAQUETE, IDUSUARIORECEPCION FROM NOTAENTREGA');
   return rows;
 };
 
 const getRecepcionById = async (id) => {
-  const [rows] = await pool.query('SELECT * FROM NOTAENTREGA WHERE NRO = ?', [id]);
+  const [rows] = await pool.query('SELECT NRO, FECHARECEPCION, HORARECEPCION, PRECIOESTIMADO, CODIGOCLIENTEENVIA, CODIGOPAQUETE, IDUSUARIORECEPCION FROM NOTAENTREGA WHERE NRO = ?', [id]);
   return rows[0];
 };
 
