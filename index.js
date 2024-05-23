@@ -4,7 +4,7 @@ const { PORT } = require('./config');
 const userRoutes = require('./routes/userRoutes');
 const roleRoutes = require('./routes/roleRoutes');
 const loginRouter = require('./routes/loginRoutes');
-
+const permisoRolRoutes = require('./routes/permisoRol');
 const cors = require('cors');
 const { pool } = require('./db');
 
@@ -16,6 +16,7 @@ app.use(express.json());
 app.use('/api/users', userRoutes);
 app.use('/api/roles', roleRoutes);
 app.use('/api/auth', loginRouter);
+app.use('/api/permisoRol', permisoRolRoutes);
 
 app.get('/ping', async (req, res) => {
   try {
