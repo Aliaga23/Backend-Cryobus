@@ -1,4 +1,5 @@
 // index.js
+require('dotenv').config();
 const express = require('express');
 const { PORT } = require('./config');
 const userRoutes = require('./routes/userRoutes');
