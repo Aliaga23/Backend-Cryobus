@@ -1,8 +1,6 @@
 // controllers/loginController.js
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 const loginModel = require('../models/loginModel');
-const { JWT_SECRET } = require('../config');
 
 const loginUser = async (req, res) => {
   const { id, pass } = req.body;
@@ -17,11 +15,10 @@ const loginUser = async (req, res) => {
       return res.status(401).json({ error: 'Usuario o contraseña incorrectos' });
     }
 
-   
-
-    res.json({ token, user: { id: user.ID, apellidos: user.APELLIDOS, nombres: user.NOMBRES, roles: user.IDROL } });
+    res.json({ message: 'Login exitoso', user: { id: user.ID, apellidos: user.APELLIDOS, nombres: user.NOMBRES, roles: user.IDROL } });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('Error en loginUser:', error.message); // Añadir log del error
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
