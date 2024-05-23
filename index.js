@@ -39,6 +39,7 @@ app.use('/api/rolConductor', rolConductorRoutes);
 app.use('/api/clientes', clienteRoutes);
 app.use('/api/items', itemRoutes);
 app.use('/api/paquetes', paqueteRoutes);
+app.use('/api/notasEntrega', notaEntregaRoutes);
 
 app.get('/ping', async (req, res) => {
   try {
