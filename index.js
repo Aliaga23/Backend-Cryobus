@@ -29,9 +29,9 @@ const allowedOrigins = [
 app.use(cors({
   origin: allowedOrigins, // Permitir solicitudes desde estos orígenes
 }));
+
+
 app.use(express.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(notasEntregaRoutes);
 
 app.use('/api/users', userRoutes);
 app.use('/api/roles', roleRoutes);
