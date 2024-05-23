@@ -1,32 +1,21 @@
-// controllers/loginController.js
+const { getUserById } = require('../models/userModel');
 const bcrypt = require('bcrypt');
-const loginModel = require('../models/loginModel');
 
 const loginUser = async (req, res) => {
   const { id, pass } = req.body;
   try {
-    const user = await loginModel.getUserById(id);
+    const user = await getUserById(id);
     if (!user) {
-      return res.status(401).json({ error: 'Usuario o contraseña incorrectos' });
+      return res.status(404).json({ message: 'Usuario no encontrado' });
     }
-
     const isMatch = await bcrypt.compare(pass, user.CONTRA);
     if (!isMatch) {
-      return res.status(401).json({ error: 'Usuario o contraseña incorrectos' });
+      return res.status(401).json({ message: 'Contraseña incorrecta' });
     }
-
-    res.json({
-      message: 'Login exitoso',
-      user: { id: req.user.id, apellidos: req.user.apellidos, nombres: req.user.nombres },
-      role: req.user.role
-    });
-    
+    res.json({ message: 'Login exitoso', user: { id: user.ID, apellidos: user.APELLIDOS, nombres: user.NOMBRES }, role: user.IDROL });
   } catch (error) {
-    console.error('Error en loginUser:', error.message); // Añadir log del error
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ message: 'Error al iniciar sesión', error });
   }
 };
 
-module.exports = {
-  loginUser,
-};
+module.exports = { loginUser };

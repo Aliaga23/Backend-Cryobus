@@ -1,23 +1,29 @@
-const { pool } = require('../db.js');
+const { getUserById } = require('../models/userModel');
 
-const authenticateUser = async (req, res, next) => {
-  const { id, pass } = req.body;
+const authenticate = async (req, res, next) => {
+  const { userId } = req.body;
+  if (!userId) {
+    return res.status(401).json({ message: 'Usuario no autenticado' });
+  }
   try {
-    const result = await pool.query('SELECT * FROM USUARIO WHERE ID = ? AND CONTRA = ?', [id, pass]);
-    if (result.length > 0) {
-      const user = result[0];
-      const roleResult = await pool.query('SELECT NOMBRE FROM ROL WHERE ID = ?', [user.IDROL]);
-      const role = roleResult[0];
-
-      req.user = { id: user.ID, apellidos: user.APELLIDOS, nombres: user.NOMBRES, role: role.NOMBRE };
-      next();
-    } else {
-      res.status(401).json({ message: 'Usuario o contraseña incorrectos' });
+    const user = await getUserById(userId);
+    if (!user) {
+      return res.status(401).json({ message: 'Usuario no encontrado' });
     }
+    req.user = user;
+    next();
   } catch (error) {
-    console.error('Error al intentar autenticar:', error);
-    res.status(500).json({ message: 'Error interno del servidor' });
+    res.status(500).json({ message: 'Error en la autenticación', error });
   }
 };
 
-module.exports = { authenticateUser };
+const authorize = (role) => {
+  return (req, res, next) => {
+    if (req.user.IDROL !== role) {
+      return res.status(403).json({ message: 'Usuario no autorizado' });
+    }
+    next();
+  };
+};
+
+module.exports = { authenticate, authorize };

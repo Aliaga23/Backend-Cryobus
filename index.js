@@ -10,7 +10,6 @@ const permisoRoutes = require('./routes/permisoRoutes');
 const tipoEnvioRoutes = require('./routes/tipoEnvioRoutes');
 const rolConductorRoutes = require('./routes/rolConductorRoutes');
 
-const authRoutes = require('./routes/authRoutes');
 const cors = require('cors');
 const { pool } = require('./db');
 
@@ -33,7 +32,6 @@ app.use('/api/permisoRol', permisoRolRoutes);
 app.use('/api/permisos', permisoRoutes);
 app.use('/api/tipoEnvio', tipoEnvioRoutes);
 app.use('/api/rolConductor', rolConductorRoutes);
-app.use('/api/authentication', authRoutes);
 
 app.get('/ping', async (req, res) => {
   try {
