@@ -14,7 +14,14 @@ const { pool } = require('./db');
 
 const app = express();
 
-app.use(cors());
+const allowedOrigins = [
+  
+  'https://proyecto-production-ccb8.up.railway.app' // Permitir solicitudes desde el frontend desplegado en Railway
+];
+
+app.use(cors({
+  origin: allowedOrigins, // Permitir solicitudes desde estos orígenes
+}));
 app.use(express.json());
 
 app.use('/api/users', userRoutes);
