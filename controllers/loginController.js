@@ -5,35 +5,22 @@ const loginModel = require('../models/loginModel');
 const loginUser = async (req, res) => {
   const { id, pass } = req.body;
   try {
-    const [rows] = await pool.query('SELECT * FROM USUARIO WHERE ID = ?', [id]);
-
-    if (rows.length > 0) {
-      const user = rows[0];
-      const validPassword = await bcrypt.compare(pass, user.CONTRA);
-
-      if (validPassword) {
-        const rolesQuery = await pool.query('SELECT ROL.NOMBRE FROM ROL INNER JOIN USUARIO ON ROL.ID = USUARIO.IDROL WHERE USUARIO.ID = ?', [user.ID]);
-        const roles = rolesQuery[0];
-
-        res.json({
-          message: 'Login exitoso',
-          user: {
-            id: user.ID,
-            apellidos: user.APELLIDOS,
-            nombres: user.NOMBRES
-          },
-          roles
-        });
-      } else {
-        res.status(400).json({ message: 'Usuario o contraseña incorrectos' });
-      }
-    } else {
-      res.status(400).json({ message: 'Usuario o contraseña incorrectos' });
+    const user = await loginModel.getUserById(id);
+    if (!user) {
+      return res.status(401).json({ error: 'Usuario o contraseña incorrectos' });
     }
+
+    const isMatch = await bcrypt.compare(pass, user.CONTRA);
+    if (!isMatch) {
+      return res.status(401).json({ error: 'Usuario o contraseña incorrectos' });
+    }
+
+    res.json({ message: 'Login exitoso', user: { id: user.ID, apellidos: user.APELLIDOS, nombres: user.NOMBRES, roles: user.IDROL } });
+    
   } catch (error) {
-    console.error('Error al intentar iniciar sesión:', error);
-    res.status(500).json({ message: 'Error  del servidor' });
-}
+    console.error('Error en loginUser:', error.message); // Añadir log del error
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 };
 
 module.exports = {
