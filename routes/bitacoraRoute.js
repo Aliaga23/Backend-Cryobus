@@ -1,7 +1,9 @@
 const express = require('express');
-const router = express.Router();
-const { getBitacora } = require('../controllers/bitacoraController');
+const { getRegistros, createRegistro } = require('../controllers/bitacoraController');
 
-router.get('/', getBitacora);
+const router = express.Router();
+
+router.get('/', getRegistros);
+router.post('/', createRegistro);
 
 module.exports = router;

@@ -32,7 +32,6 @@ const io = new Server(server, {
     methods: ['GET', 'POST'],
   },
 });
-
 const allowedOrigins = [
   'http://localhost:3000', // Permitir solicitudes desde localhost
   'https://proyecto-production-ccb8.up.railway.app' // Permitir solicitudes desde el frontend desplegado en Railway
@@ -76,7 +75,7 @@ io.on('connection', (socket) => {
   });
 });
 
-server.listen(PORT, () => { // Cambiado de app.listen a server.listen
+server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
 
