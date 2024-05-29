@@ -2,7 +2,6 @@ const { getUserById } = require('../models/userModel');
 const bcrypt = require('bcrypt');
 const { addRegistro } = require('../models/bitacoraModel');
 const io = require('../index');
-const moment = require('moment-timezone');
 
 const loginUser = async (req, res) => {
   const { id, pass } = req.body;
@@ -15,16 +14,19 @@ const loginUser = async (req, res) => {
     if (!isMatch) {
       return res.status(401).json({ message: 'Contraseña incorrecta' });
     }
-    if(user && isMatch) {
+    if (user && isMatch) {
       res.json({ message: 'Login exitoso', user: { id: user.ID, apellidos: user.APELLIDOS, nombres: user.NOMBRES }, role: user.IDROL });
       
       // Obtener IP del cliente desde el request
       const ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 
       // Obtener fecha y hora en la zona horaria deseada
-      const now = moment().tz('America/La_Paz'); // Ajusta según tu zona horaria
-      const fecha = now.format('YYYY-MM-DD');
-      const hora = now.format('HH:mm:ss');
+      const now = new Date();
+      const offset = -4; // UTC-4 for Bolivia
+      const localDate = new Date(now.getTime() + offset * 60 * 60 * 1000);
+      
+      const fecha = localDate.toISOString().split('T')[0];
+      const hora = localDate.toISOString().split('T')[1].split('.')[0];
 
       // Registrar la acción en la bitácora
       const registro = {
