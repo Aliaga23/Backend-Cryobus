@@ -1,4 +1,7 @@
 const UserModel = require('../models/userModel');
+const { addRegistro } = require('../models/bitacoraModel');
+const io = require('../index');
+const moment = require('moment-timezone');
 
 const getUsers = async (req, res) => {
   try {
@@ -14,6 +17,26 @@ const createUser = async (req, res) => {
   try {
     await UserModel.createUser(newUser);
     res.status(201).json({ message: 'User created successfully' });
+      // Obtener IP del cliente desde el request
+      const ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+
+      // Obtener fecha y hora en la zona horaria deseada
+      const now = moment().tz('America/La_Paz'); // Ajusta según tu zona horaria
+      const fecha = now.format('YYYY-MM-DD');
+      const hora = now.format('HH:mm:ss');
+
+      // Registrar la acción en la bitácora
+      const registro = {
+        IDACCION: 3, // ID de INICIAR SESION
+        IDUSUARIO: user.ID,
+        IP: ipAddress,
+        FECHA: fecha,
+        HORAACCION: hora,
+        ELEMENTOMODIFICADO: 'CREACION DE USUARIO'
+      };
+      const registroId = await addRegistro(registro);
+        // Emitir evento de nueva acción
+        io.emit('nuevaAccion', { ...registro, NRO: registroId });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
