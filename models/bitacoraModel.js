@@ -2,7 +2,7 @@ const { pool } = require('../db');
 
 const getAllRegistros = async () => {
   try {
-    const [rows] = await pool.query('SELECT * FROM REGISTROACCION ORDER BY NRO DESC');
+    const [rows] = await pool.query('SELECT * FROM REGISTROACCION ORDER BY NRO ASC');
     return rows;
   } catch (error) {
     throw new Error(error.message);
