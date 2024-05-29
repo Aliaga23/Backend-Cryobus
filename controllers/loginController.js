@@ -2,6 +2,7 @@ const { getUserById } = require('../models/userModel');
 const bcrypt = require('bcrypt');
 const { addRegistro } = require('../models/bitacoraModel');
 const io = require('../index');
+const moment = require('moment-timezone');
 
 const loginUser = async (req, res) => {
   const { id, pass } = req.body;
@@ -14,26 +15,16 @@ const loginUser = async (req, res) => {
     if (!isMatch) {
       return res.status(401).json({ message: 'Contraseña incorrecta' });
     }
-    if (user && isMatch) {
+    if(user && isMatch) {
       res.json({ message: 'Login exitoso', user: { id: user.ID, apellidos: user.APELLIDOS, nombres: user.NOMBRES }, role: user.IDROL });
       
       // Obtener IP del cliente desde el request
       const ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 
-      // Obtener fecha y hora en la zona horaria de Bolivia (UTC-4)
-      const now = new Date();
-      const utcOffset = now.getTimezoneOffset() * 60000; // offset en milisegundos
-      const boliviaTime = new Date(now.getTime() - utcOffset + (3600000 * -4)); // UTC-4
-
-      const year = boliviaTime.getFullYear();
-      const month = String(boliviaTime.getMonth() + 1).padStart(2, '0');
-      const day = String(boliviaTime.getDate()).padStart(2, '0');
-      const fecha = `${year}-${month}-${day}`;
-
-      const hours = String(boliviaTime.getHours()).padStart(2, '0');
-      const minutes = String(boliviaTime.getMinutes()).padStart(2, '0');
-      const seconds = String(boliviaTime.getSeconds()).padStart(2, '0');
-      const hora = `${hours}:${minutes}:${seconds}`;
+      // Obtener fecha y hora en la zona horaria deseada
+      const now = moment().tz('America/La_Paz'); // Ajusta según tu zona horaria
+      const fecha = now.format('YYYY-MM-DD');
+      const hora = now.format('HH:mm:ss');
 
       // Registrar la acción en la bitácora
       const registro = {
