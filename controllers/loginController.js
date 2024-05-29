@@ -15,7 +15,9 @@ const loginUser = async (req, res) => {
     if (!isMatch) {
       return res.status(401).json({ message: 'Contraseña incorrecta' });
     }
-
+    if(user && isMatch)
+      {
+    res.json({ message: 'Login exitoso', user: { id: user.ID, apellidos: user.APELLIDOS, nombres: user.NOMBRES }, role: user.IDROL });
     // Obtener IP del cliente
     const ipAPI = "https://api.ipify.org?format=json";
     const response = await fetch(ipAPI);
@@ -37,8 +39,7 @@ const loginUser = async (req, res) => {
 
     // Emitir evento de nueva acción
     io.emit('nuevaAccion', { ...registro, NRO: registroId });
-
-    res.json({ message: 'Login exitoso', user: { id: user.ID, apellidos: user.APELLIDOS, nombres: user.NOMBRES }, role: user.IDROL });
+  }
   } catch (error) {
     res.status(500).json({ message: 'Error al iniciar sesión', error });
   }

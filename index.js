@@ -6,7 +6,6 @@ const { Server } = require('socket.io');
 const userRoutes = require('./routes/userRoutes');
 const roleRoutes = require('./routes/roleRoutes');
 const loginRouter = require('./routes/loginRouter');
-const logoutRouter = require('./routes/logoutRouter');
 const permisoRolRoutes = require('./routes/permisoRolRoutes');
 const permisoRoutes = require('./routes/permisoRoutes');
 const tipoEnvioRoutes = require('./routes/tipoEnvioRoutes');
@@ -19,11 +18,11 @@ const recepcionRoutes = require('./routes/recepcionRouter');
 const estadoEntregaRoutes = require('./routes/estadoEntregaRoutes');
 const bitacoraRoutes = require('./routes/bitacoraRoutes');
 
-
+const http = require('http');
 const app = express();
 const cors = require('cors');
 const { pool } = require('./db');
-const http = require('http');
+
 const server = http.createServer(app);
 
 
@@ -48,7 +47,6 @@ app.use(express.json());
 app.use('/api/users', userRoutes);
 app.use('/api/roles', roleRoutes);
 app.use('/api/auth', loginRouter);
-app.use('/api/logout', logoutRouter);
 app.use('/api/permisoRol', permisoRolRoutes);
 app.use('/api/permisos', permisoRoutes);
 app.use('/api/tipoEnvio', tipoEnvioRoutes);
