@@ -2,6 +2,7 @@
 require('dotenv').config();
 const express = require('express');
 const { PORT } = require('./config');
+const { Server } = require('socket.io');
 const userRoutes = require('./routes/userRoutes');
 const roleRoutes = require('./routes/roleRoutes');
 const loginRouter = require('./routes/loginRouter');
@@ -18,9 +19,16 @@ const estadoEntregaRoutes = require('./routes/estadoEntregaRoutes');
 
 const cors = require('cors');
 const { pool } = require('./db');
+const http = require('http');
+const server = http.createServer(app);
 
 const app = express();
-
+const io = new Server(server, {
+  cors: {
+    origin: ['http://localhost:3000', 'https://proyecto2-production-ba5b.up.railway.app'],
+    methods: ['GET', 'POST'],
+  },
+});
 const allowedOrigins = [
   'http://localhost:3000', // Permitir solicitudes desde localhost
   'https://cryobus.up.railway.app' // Permitir solicitudes desde el frontend desplegado en Railway
@@ -36,6 +44,7 @@ app.use(express.json());
 app.use('/api/users', userRoutes);
 app.use('/api/roles', roleRoutes);
 app.use('/api/auth', loginRouter);
+app.use('/api/logout', logoutRouter);
 app.use('/api/permisoRol', permisoRolRoutes);
 app.use('/api/permisos', permisoRoutes);
 app.use('/api/tipoEnvio', tipoEnvioRoutes);
@@ -46,6 +55,7 @@ app.use('/api/paquetes', paqueteRoutes);
 app.use('/api/notasEntrega', notaEntregaRoutes);
 app.use('/api/recepciones', recepcionRoutes);
 app.use('/api/estadosEntrega', estadoEntregaRoutes);
+app.use('/api/bitacora', bitacoraRoutes);
 
 app.get('/ping', async (req, res) => {
   try {
@@ -56,7 +66,12 @@ app.get('/ping', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-
+io.on('connection', (socket) => {
+  console.log('Nuevo cliente conectado:', socket.id);
+  socket.on('disconnect', () => {
+    console.log('Cliente desconectado:', socket.id);
+  });
+});
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
