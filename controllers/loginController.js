@@ -20,13 +20,20 @@ const loginUser = async (req, res) => {
       // Obtener IP del cliente desde el request
       const ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 
-      // Obtener fecha y hora en la zona horaria deseada
+      // Obtener fecha y hora en la zona horaria de Bolivia (UTC-4)
       const now = new Date();
-      const offset = -4; // UTC-4 for Bolivia
-      const localDate = new Date(now.getTime() + offset * 60 * 60 * 1000);
-      
-      const fecha = localDate.toISOString().split('T')[0];
-      const hora = localDate.toISOString().split('T')[1].split('.')[0];
+      const utcOffset = now.getTimezoneOffset() * 60000; // offset en milisegundos
+      const boliviaTime = new Date(now.getTime() - utcOffset + (3600000 * -4)); // UTC-4
+
+      const year = boliviaTime.getFullYear();
+      const month = String(boliviaTime.getMonth() + 1).padStart(2, '0');
+      const day = String(boliviaTime.getDate()).padStart(2, '0');
+      const fecha = `${year}-${month}-${day}`;
+
+      const hours = String(boliviaTime.getHours()).padStart(2, '0');
+      const minutes = String(boliviaTime.getMinutes()).padStart(2, '0');
+      const seconds = String(boliviaTime.getSeconds()).padStart(2, '0');
+      const hora = `${hours}:${minutes}:${seconds}`;
 
       // Registrar la acción en la bitácora
       const registro = {
