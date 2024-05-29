@@ -6,6 +6,7 @@ const { Server } = require('socket.io');
 const userRoutes = require('./routes/userRoutes');
 const roleRoutes = require('./routes/roleRoutes');
 const loginRouter = require('./routes/loginRouter');
+const logoutRouter = require('./routes/logoutRouter');
 const permisoRolRoutes = require('./routes/permisoRolRoutes');
 const permisoRoutes = require('./routes/permisoRoutes');
 const tipoEnvioRoutes = require('./routes/tipoEnvioRoutes');
@@ -16,13 +17,16 @@ const paqueteRoutes = require('./routes/paqueteRoutes');
 const notaEntregaRoutes = require( './routes/notaEntregaRoutes.js');
 const recepcionRoutes = require('./routes/recepcionRouter');
 const estadoEntregaRoutes = require('./routes/estadoEntregaRoutes');
+const bitacoraRoutes = require('./routes/bitacoraRoutes');
 
+
+const app = express();
 const cors = require('cors');
 const { pool } = require('./db');
 const http = require('http');
 const server = http.createServer(app);
 
-const app = express();
+
 const io = new Server(server, {
   cors: {
     origin: ['http://localhost:3000', 'https://proyecto2-production-ba5b.up.railway.app'],
