@@ -33,7 +33,7 @@ const allowedOrigins = [
 
 app.use(cors({
   origin: allowedOrigins,
-  methods: ['GET', 'POST'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Agrega los métodos permitidos aquí
   allowedHeaders: ['Content-Type'],
   credentials: true
 }));
@@ -71,7 +71,7 @@ app.get('/ping', async (req, res) => {
 const io = new Server(server, {
   cors: {
     origin: allowedOrigins,
-    methods: ['GET', 'POST'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Asegúrate de que Socket.io también permita estos métodos
     allowedHeaders: ['Content-Type'],
     credentials: true
   }
