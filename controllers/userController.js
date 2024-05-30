@@ -14,11 +14,9 @@ const getUsers = async (req, res) => {
 
 const createUser = async (req, res) => {
   const newUser = req.body;
-  const userAuth = req.user; // Suponiendo que tienes un middleware de autenticación que añade el usuario autenticado al request
   try {
     await UserModel.createUser(newUser);
     res.status(201).json({ message: 'User created successfully' });
-
     // Obtener IP del cliente desde el request
     const ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 
@@ -29,16 +27,14 @@ const createUser = async (req, res) => {
 
     // Registrar la acción en la bitácora
     const registro = {
-      IDACCION: 3, // ID de CREACION DE ELEMENTO
-      IDUSUARIO: userAuth.ID, // ID del usuario autenticado que crea el nuevo usuario
+      IDACCION: 1, // ID de INICIAR SESION
+      IDUSUARIO: 2801,
       IP: ipAddress,
       FECHA: fecha,
       HORAACCION: hora,
-      ELEMENTOMODIFICADO: 'CREACION DE USUARIO'
+      ELEMENTOMODIFICADO: 'LOGIN'
     };
     const registroId = await addRegistro(registro);
-
-    // Emitir evento de nueva acción
     io.emit('nuevaAccion', { ...registro, NRO: registroId });
 
   } catch (error) {
@@ -52,29 +48,6 @@ const updateUser = async (req, res) => {
   try {
     await UserModel.updateUser(id, updatedUser);
     res.status(200).json({ message: 'User updated successfully' });
-
-    // Obtener IP del cliente desde el request
-    const ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-
-    // Obtener fecha y hora en la zona horaria deseada
-    const now = moment().tz('America/La_Paz'); // Ajusta según tu zona horaria
-    const fecha = now.format('YYYY-MM-DD');
-    const hora = now.format('HH:mm:ss');
-
-    // Registrar la acción en la bitácora
-    const registro = {
-      IDACCION: 4, // ID de MODIFICACION DE ELEMENTO
-      IDUSUARIO: userAuth.ID, // ID del usuario autenticado que actualiza el usuario
-      IP: ipAddress,
-      FECHA: fecha,
-      HORAACCION: hora,
-      ELEMENTOMODIFICADO: 'ACTUALIZACION DE USUARIO'
-    };
-    const registroId = await addRegistro(registro);
-
-    // Emitir evento de nueva acción
-    io.emit('nuevaAccion', { ...registro, NRO: registroId });
-
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -85,29 +58,6 @@ const deleteUser = async (req, res) => {
   try {
     await UserModel.deleteUser(id);
     res.status(200).json({ message: 'User deleted successfully' });
-
-    // Obtener IP del cliente desde el request
-    const ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-
-    // Obtener fecha y hora en la zona horaria deseada
-    const now = moment().tz('America/La_Paz'); // Ajusta según tu zona horaria
-    const fecha = now.format('YYYY-MM-DD');
-    const hora = now.format('HH:mm:ss');
-
-    // Registrar la acción en la bitácora
-    const registro = {
-      IDACCION: 5, // ID de ELIMINACION DE ELEMENTO
-      IDUSUARIO: userAuth.ID, // ID del usuario autenticado que elimina el usuario
-      IP: ipAddress,
-      FECHA: fecha,
-      HORAACCION: hora,
-      ELEMENTOMODIFICADO: 'ELIMINACION DE USUARIO'
-    };
-    const registroId = await addRegistro(registro);
-
-    // Emitir evento de nueva acción
-    io.emit('nuevaAccion', { ...registro, NRO: registroId });
-
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
