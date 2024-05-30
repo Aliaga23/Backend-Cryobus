@@ -33,8 +33,8 @@ const allowedOrigins = [
 
 app.use(cors({
   origin: allowedOrigins,
-  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Agrega los métodos permitidos aquí
-  allowedHeaders: ['Content-Type', 'Authorization'], // Asegúrate de permitir el encabezado Authorization
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 }));
 
@@ -71,8 +71,8 @@ app.get('/ping', async (req, res) => {
 const io = new Server(server, {
   cors: {
     origin: allowedOrigins,
-    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Asegúrate de que Socket.io también permita estos métodos
-    allowedHeaders: ['Content-Type', 'Authorization'], // Asegúrate de permitir el encabezado Authorization
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
   }
 });
@@ -88,6 +88,8 @@ io.on('connection', (socket) => {
     console.log(`Cliente desconectado: ${socket.id}, razón: ${reason}`);
   });
 });
+
+module.exports = io; // Exportamos io para que pueda ser utilizado en otros archivos
 
 // Iniciando el servidor
 server.listen(PORT, () => {

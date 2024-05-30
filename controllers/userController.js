@@ -1,6 +1,6 @@
 const UserModel = require('../models/userModel');
 const { addRegistro } = require('../models/bitacoraModel');
-const io = require('../index'); // Asegúrate de importar desde el archivo correcto
+const io = require('../index'); // Importar io correctamente
 const moment = require('moment-timezone');
 
 const getUsers = async (req, res) => {
@@ -8,14 +8,13 @@ const getUsers = async (req, res) => {
     const users = await UserModel.getAllUsers();
     res.json(users);
   } catch (error) {
-    console.error('Error al obtener los usuarios:', error);
     res.status(500).json({ error: error.message });
   }
 };
 
 const createUser = async (req, res) => {
   const newUser = req.body;
-  const userId = req.user.ID; // ID del usuario que está creando otro usuario
+  const userId = req.user.ID;
   try {
     await UserModel.createUser(newUser);
     res.status(201).json({ message: 'User created successfully' });
@@ -24,14 +23,14 @@ const createUser = async (req, res) => {
     const ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 
     // Obtener fecha y hora en la zona horaria deseada
-    const now = moment().tz('America/La_Paz'); // Ajusta según tu zona horaria
+    const now = moment().tz('America/La_Paz');
     const fecha = now.format('YYYY-MM-DD');
     const hora = now.format('HH:mm:ss');
 
     // Registrar la acción en la bitácora
     const registro = {
-      IDACCION: 3, // ID de CREACION DE USUARIO
-      IDUSUARIO: userId, // ID del usuario que realiza la acción
+      IDACCION: 3,
+      IDUSUARIO: userId,
       IP: ipAddress,
       FECHA: fecha,
       HORAACCION: hora,
@@ -42,7 +41,9 @@ const createUser = async (req, res) => {
 
   } catch (error) {
     console.error('Error al crear el usuario:', error);
-    res.status(500).json({ error: error.message });
+    if (!res.headersSent) {
+      res.status(500).json({ error: error.message });
+    }
   }
 };
 
@@ -53,7 +54,6 @@ const updateUser = async (req, res) => {
     await UserModel.updateUser(id, updatedUser);
     res.status(200).json({ message: 'User updated successfully' });
   } catch (error) {
-    console.error('Error al actualizar el usuario:', error);
     res.status(500).json({ error: error.message });
   }
 };
@@ -64,7 +64,6 @@ const deleteUser = async (req, res) => {
     await UserModel.deleteUser(id);
     res.status(200).json({ message: 'User deleted successfully' });
   } catch (error) {
-    console.error('Error al eliminar el usuario:', error);
     res.status(500).json({ error: error.message });
   }
 };
@@ -78,7 +77,6 @@ const getUserById = async (req, res) => {
     }
     res.json(user);
   } catch (error) {
-    console.error('Error al obtener el usuario:', error);
     res.status(500).json({ error: error.message });
   }
 };
