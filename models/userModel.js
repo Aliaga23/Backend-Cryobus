@@ -31,7 +31,7 @@ const createUser = async (user) => {
 };
 
 const updateUser = async (id, user) => {
-  const { apellidos, nombres, contra, idRol } = user;
+  const { id,apellidos, nombres, contra, idRol } = user;
   const hashedPassword = await bcrypt.hash(contra, 10);
   try {
     await pool.query('UPDATE USUARIO SET ID = ?,CONTRA = ?, APELLIDOS = ?, NOMBRES = ?, IDROL = ? WHERE ID = ?', [id,hashedPassword, apellidos, nombres, idRol, id]);
