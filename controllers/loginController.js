@@ -27,28 +27,32 @@ const loginUser = async (req, res) => {
     // Enviar respuesta de éxito antes de ejecutar la lógica adicional
     res.json({ token, user: { id: user.ID, apellidos: user.APELLIDOS, nombres: user.NOMBRES }, role: user.IDROL });
 
-    // Obtener IP del cliente desde el request
-    const ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    // Operaciones adicionales después de enviar la respuesta
+    try {
+      // Obtener IP del cliente desde el request
+      const ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 
-    // Obtener fecha y hora en la zona horaria deseada
-    const now = moment().tz('America/La_Paz'); // Ajusta según tu zona horaria
-    const fecha = now.format('YYYY-MM-DD');
-    const hora = now.format('HH:mm:ss');
+      // Obtener fecha y hora en la zona horaria deseada
+      const now = moment().tz('America/La_Paz'); // Ajusta según tu zona horaria
+      const fecha = now.format('YYYY-MM-DD');
+      const hora = now.format('HH:mm:ss');
 
-    // Registrar la acción en la bitácora
-    const registro = {
-      IDACCION: 1, // ID de INICIAR SESION
-      IDUSUARIO: user.ID,
-      IP: ipAddress,
-      FECHA: fecha,
-      HORAACCION: hora,
-      ELEMENTOMODIFICADO: 'LOGIN'
-    };
-    const registroId = await addRegistro(registro);
+      // Registrar la acción en la bitácora
+      const registro = {
+        IDACCION: 1, // ID de INICIAR SESION
+        IDUSUARIO: user.ID,
+        IP: ipAddress,
+        FECHA: fecha,
+        HORAACCION: hora,
+        ELEMENTOMODIFICADO: 'LOGIN'
+      };
+      const registroId = await addRegistro(registro);
 
-    // Emitir evento de nueva acción
-    io.emit('nuevaAccion', { ...registro, NRO: registroId });
-
+      // Emitir evento de nueva acción
+      io.emit('nuevaAccion', { ...registro, NRO: registroId });
+    } catch (error) {
+      console.error('Error al registrar la acción en la bitácora:', error);
+    }
   } catch (error) {
     console.error('Error en loginUser:', error);
     if (!res.headersSent) {
