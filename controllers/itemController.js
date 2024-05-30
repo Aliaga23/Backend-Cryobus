@@ -13,7 +13,7 @@ const getItems = async (req, res) => {
 
 const getItemById = async (req, res) => {
   try {
-    const item = await itemModel.getItemById(req.params.codigopaquete, req.params.nro);
+    const item = await itemModel.getItemById(req.params.codigopaquete);
     res.json(item);
   } catch (error) {
     console.error('Error al obtener item:', error);

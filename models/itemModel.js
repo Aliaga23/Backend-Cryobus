@@ -6,8 +6,8 @@ const getItems = async () => {
   return rows;
 };
 
-const getItemById = async (codigoPaquete, nro) => {
-  const [rows] = await pool.query('SELECT * FROM ITEM WHERE CODIGOPAQUETE = ? AND NRO = ?', [codigoPaquete, nro]);
+const getItemById = async (codigoPaquete) => {
+  const [rows] = await pool.query('SELECT * FROM ITEM WHERE CODIGOPAQUETE = ? ', [codigoPaquete]);
   return rows[0];
 };
 
