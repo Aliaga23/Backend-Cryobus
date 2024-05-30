@@ -2,6 +2,7 @@ require('dotenv').config();
 
 module.exports = {
   PORT: process.env.PORT || 3000,
+  JWT_SECRET: process.env.PORT || 123,
   DB_HOST: process.env.DB_HOST || 'roundhouse.proxy.rlwy.net',
   DB_USER: process.env.DB_USER || 'root',
   DB_PASSWORD: process.env.DB_PASSWORD || 'yNFwyZkVQfjLiHozbASiULcWbeAHcDPS',
