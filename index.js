@@ -6,7 +6,7 @@ const cors = require('cors');
 const { pool } = require('./db');
 const { PORT } = require('./config');
 
-// Importar rutas
+// Importar rutas y controladores
 const userRoutes = require('./routes/userRoutes');
 const roleRoutes = require('./routes/roleRoutes');
 const loginRouter = require('./routes/loginRouter');
@@ -21,6 +21,7 @@ const notaEntregaRoutes = require('./routes/notaEntregaRoutes');
 const recepcionRoutes = require('./routes/recepcionRouter');
 const estadoEntregaRoutes = require('./routes/estadoEntregaRoutes');
 const bitacoraRoutes = require('./routes/bitacoraRoutes');
+const { setIO } = require('./controllers/socketController'); // Nuevo controlador para configurar io
 
 const app = express();
 const server = http.createServer(app);
@@ -77,6 +78,9 @@ const io = new Server(server, {
   }
 });
 
+// Pasar io a los controladores
+setIO(io);
+
 io.on('connection', (socket) => {
   console.log(`Nuevo cliente conectado: ${socket.id}`);
 
@@ -88,8 +92,6 @@ io.on('connection', (socket) => {
     console.log(`Cliente desconectado: ${socket.id}, razón: ${reason}`);
   });
 });
-
-module.exports = io; // Exportamos io para que pueda ser utilizado en otros archivos
 
 // Iniciando el servidor
 server.listen(PORT, () => {

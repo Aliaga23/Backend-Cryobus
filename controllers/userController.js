@@ -1,7 +1,7 @@
 const UserModel = require('../models/userModel');
 const { addRegistro } = require('../models/bitacoraModel');
-const io = require('../index'); // Importar io correctamente
 const moment = require('moment-timezone');
+const { getIO } = require('./socketController'); // Importar getIO para obtener io
 
 const getUsers = async (req, res) => {
   try {
@@ -37,6 +37,7 @@ const createUser = async (req, res) => {
       ELEMENTOMODIFICADO: 'CREACION DE USUARIO'
     };
     const registroId = await addRegistro(registro);
+    const io = getIO();
     io.emit('nuevaAccion', { ...registro, NRO: registroId });
 
   } catch (error) {

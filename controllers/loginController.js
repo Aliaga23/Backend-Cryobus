@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const { addRegistro } = require('../models/bitacoraModel');
 const moment = require('moment-timezone');
 const jwt = require('jsonwebtoken');
-const io = require('../index'); // Importar io correctamente
+const { getIO } = require('./socketController'); // Importar getIO para obtener io
 
 const loginUser = async (req, res) => {
   const { id, pass } = req.body;
@@ -47,6 +47,7 @@ const loginUser = async (req, res) => {
     const registroId = await addRegistro(registro);
 
     // Emitir evento de nueva acción
+    const io = getIO();
     io.emit('nuevaAccion', { ...registro, NRO: registroId });
 
   } catch (error) {
