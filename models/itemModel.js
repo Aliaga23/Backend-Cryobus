@@ -8,7 +8,7 @@ const getItems = async () => {
 
 const getItemById = async (codigoPaquete) => {
   const [rows] = await pool.query('SELECT * FROM ITEM WHERE CODIGOPAQUETE = ? ', [codigoPaquete]);
-  return rows[0];
+  return rows[rows];
 };
 
 const createItem = async (item) => {
