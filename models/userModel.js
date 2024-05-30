@@ -31,10 +31,10 @@ const createUser = async (user) => {
 };
 
 const updateUser = async (id, user) => {
-  const { id,apellidos, nombres, contra, idRol } = user;
+  const { apellidos, nombres, contra, idRol } = user;
   const hashedPassword = await bcrypt.hash(contra, 10);
   try {
-    await pool.query('UPDATE USUARIO SET ID = ?,CONTRA = ?, APELLIDOS = ?, NOMBRES = ?, IDROL = ? WHERE ID = ?', [id,hashedPassword, apellidos, nombres, idRol, id]);
+    await pool.query('UPDATE USUARIO SET CONTRA = ?, APELLIDOS = ?, NOMBRES = ?, IDROL = ? WHERE ID = ?', [hashedPassword, apellidos, nombres, idRol, id]);
   } catch (error) {
     throw new Error(error.message);
   }
