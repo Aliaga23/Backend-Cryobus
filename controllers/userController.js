@@ -27,12 +27,12 @@ const createUser = async (req, res) => {
 
     // Registrar la acción en la bitácora
     const registro = {
-      IDACCION: 1, // ID de INICIAR SESION
+      IDACCION: 3, // ID de INICIAR SESION
       IDUSUARIO: 2801,
       IP: ipAddress,
       FECHA: fecha,
       HORAACCION: hora,
-      ELEMENTOMODIFICADO: 'LOGIN'
+      ELEMENTOMODIFICADO: 'CREACION DE USUARIO'
     };
     const registroId = await addRegistro(registro);
     io.emit('nuevaAccion', { ...registro, NRO: registroId });
@@ -48,6 +48,26 @@ const updateUser = async (req, res) => {
   try {
     await UserModel.updateUser(id, updatedUser);
     res.status(200).json({ message: 'User updated successfully' });
+     // Obtener IP del cliente desde el request
+     const ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+
+     // Obtener fecha y hora en la zona horaria deseada
+     const now = moment().tz('America/La_Paz'); // Ajusta según tu zona horaria
+     const fecha = now.format('YYYY-MM-DD');
+     const hora = now.format('HH:mm:ss');
+ 
+     // Registrar la acción en la bitácora
+     const registro = {
+       IDACCION: 5, // ID de INICIAR SESION
+       IDUSUARIO: 2801,
+       IP: ipAddress,
+       FECHA: fecha,
+       HORAACCION: hora,
+       ELEMENTOMODIFICADO: 'MODIFICACION DE USUARIO'
+       
+     };
+     const registroId = await addRegistro(registro);
+     io.emit('nuevaAccion', { ...registro, NRO: registroId });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -58,6 +78,25 @@ const deleteUser = async (req, res) => {
   try {
     await UserModel.deleteUser(id);
     res.status(200).json({ message: 'User deleted successfully' });
+    const ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+
+    // Obtener fecha y hora en la zona horaria deseada
+    const now = moment().tz('America/La_Paz'); // Ajusta según tu zona horaria
+    const fecha = now.format('YYYY-MM-DD');
+    const hora = now.format('HH:mm:ss');
+
+    // Registrar la acción en la bitácora
+    const registro = {
+      IDACCION: 4, // ID de INICIAR SESION
+      IDUSUARIO: 2801,
+      IP: ipAddress,
+      FECHA: fecha,
+      HORAACCION: hora,
+      ELEMENTOMODIFICADO: 'ELIMINACION DE USUARIO'
+    };
+    const registroId = await addRegistro(registro);
+    io.emit('nuevaAccion', { ...registro, NRO: registroId });
+
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
