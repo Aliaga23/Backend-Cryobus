@@ -1,5 +1,4 @@
 const UserModel = require('../models/userModel');
-
 const { addRegistro } = require('../models/bitacoraModel');
 const io = require('../index'); // Asegúrate de importar desde el archivo correcto
 const moment = require('moment-timezone');
@@ -15,12 +14,9 @@ const getUsers = async (req, res) => {
 
 const createUser = async (req, res) => {
   const newUser = req.body;
-  const user = await getUserById(id);
   try {
     await UserModel.createUser(newUser);
     res.status(201).json({ message: 'User created successfully' });
-    res.json({ message: 'Login exitoso', user: { id: user.ID, apellidos: user.APELLIDOS, nombres: user.NOMBRES }, role: user.IDROL });
-      
     // Obtener IP del cliente desde el request
     const ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 
@@ -96,7 +92,7 @@ const deleteUser = async (req, res) => {
       IP: ipAddress,
       FECHA: fecha,
       HORAACCION: hora,
-      ELEMENTOMODIFICADO: 'ELIMINACION DE USUARIO'
+      ELEMENTOMODIFICADO: 'ELIMINacx DE USUARIO'
     };
     const registroId = await addRegistro(registro);
     io.emit('nuevaAccion', { ...registro, NRO: registroId });
