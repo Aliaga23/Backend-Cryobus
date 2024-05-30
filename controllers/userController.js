@@ -8,6 +8,7 @@ const getUsers = async (req, res) => {
     const users = await UserModel.getAllUsers();
     res.json(users);
   } catch (error) {
+    console.error('Error al obtener los usuarios:', error);
     res.status(500).json({ error: error.message });
   }
 };
@@ -40,6 +41,7 @@ const createUser = async (req, res) => {
     io.emit('nuevaAccion', { ...registro, NRO: registroId });
 
   } catch (error) {
+    console.error('Error al crear el usuario:', error);
     res.status(500).json({ error: error.message });
   }
 };
@@ -50,8 +52,8 @@ const updateUser = async (req, res) => {
   try {
     await UserModel.updateUser(id, updatedUser);
     res.status(200).json({ message: 'User updated successfully' });
-    
   } catch (error) {
+    console.error('Error al actualizar el usuario:', error);
     res.status(500).json({ error: error.message });
   }
 };
@@ -61,9 +63,8 @@ const deleteUser = async (req, res) => {
   try {
     await UserModel.deleteUser(id);
     res.status(200).json({ message: 'User deleted successfully' });
-    
-
   } catch (error) {
+    console.error('Error al eliminar el usuario:', error);
     res.status(500).json({ error: error.message });
   }
 };
@@ -77,6 +78,7 @@ const getUserById = async (req, res) => {
     }
     res.json(user);
   } catch (error) {
+    console.error('Error al obtener el usuario:', error);
     res.status(500).json({ error: error.message });
   }
 };
