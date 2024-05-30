@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const { addRegistro } = require('../models/bitacoraModel');
 const moment = require('moment-timezone');
 const io = require('../index'); // Asegúrate de que esta importación esté correcta
+const jwt = require('jsonwebtoken');
 
 const loginUser = async (req, res) => {
   const { id, pass } = req.body;
@@ -16,7 +17,8 @@ const loginUser = async (req, res) => {
     if (!isMatch) {
       return res.status(401).json({ message: 'Contraseña incorrecta' });
     }
-
+    const token = jwt.sign({ userId: user.ID, role: user.IDROL }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    res.json({ token, user: { id: user.ID, apellidos: user.APELLIDOS, nombres: user.NOMBRES }, role: user.IDROL });
     // Enviar respuesta de éxito antes de ejecutar la lógica adicional
     res.json({ message: 'Login exitoso', user: { id: user.ID, apellidos: user.APELLIDOS, nombres: user.NOMBRES }, role: user.IDROL });
 

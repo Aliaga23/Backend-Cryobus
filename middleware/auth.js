@@ -1,12 +1,14 @@
+const jwt = require('jsonwebtoken');
 const { getUserById } = require('../models/userModel');
 
 const authenticate = async (req, res, next) => {
-  const { userId } = req.body;
-  if (!userId) {
+  const token = req.headers['authorization']?.split(' ')[1]; // Obtener el token del encabezado Authorization
+  if (!token) {
     return res.status(401).json({ message: 'Usuario no autenticado' });
   }
   try {
-    const user = await getUserById(userId);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await getUserById(decoded.userId);
     if (!user) {
       return res.status(401).json({ message: 'Usuario no encontrado' });
     }
@@ -17,13 +19,4 @@ const authenticate = async (req, res, next) => {
   }
 };
 
-const authorize = (role) => {
-  return (req, res, next) => {
-    if (req.user.IDROL !== role) {
-      return res.status(403).json({ message: 'Usuario no autorizado' });
-    }
-    next();
-  };
-};
-
-module.exports = { authenticate, authorize };
+module.exports = { authenticate };
