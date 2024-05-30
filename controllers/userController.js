@@ -14,9 +14,11 @@ const getUsers = async (req, res) => {
 
 const createUser = async (req, res) => {
   const newUser = req.body;
+  const userId = req.user.ID; // ID del usuario que está creando otro usuario
   try {
     await UserModel.createUser(newUser);
     res.status(201).json({ message: 'User created successfully' });
+
     // Obtener IP del cliente desde el request
     const ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 
@@ -27,8 +29,8 @@ const createUser = async (req, res) => {
 
     // Registrar la acción en la bitácora
     const registro = {
-      IDACCION: 3, // ID de INICIAR SESION
-      IDUSUARIO: 2801,
+      IDACCION: 3, // ID de CREACION DE USUARIO
+      IDUSUARIO: userId, // ID del usuario que realiza la acción
       IP: ipAddress,
       FECHA: fecha,
       HORAACCION: hora,
