@@ -19,6 +19,21 @@ const getPermisoById = async (id) => {
   }
 };
 
+const getPermisosByUserId = async (userId) => {
+  try {
+    const [rows] = await pool.query(
+      `SELECT PERMISO.ID AS IDPERMISO FROM PERMISO
+       JOIN DETALLEROLPERMISO ON PERMISO.ID = DETALLEROLPERMISO.IDPERMISO
+       JOIN USUARIO ON DETALLEROLPERMISO.IDROL = USUARIO.IDROL
+       WHERE USUARIO.ID = ?`, 
+      [userId]
+    );
+    return rows;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
 const createPermiso = async (permiso) => {
   const { id, nombre } = permiso;
   try {
@@ -48,6 +63,7 @@ const deletePermiso = async (id) => {
 module.exports = {
   getAllPermisos,
   getPermisoById,
+  getPermisosByUserId,
   createPermiso,
   updatePermiso,
   deletePermiso,

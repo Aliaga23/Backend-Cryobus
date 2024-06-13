@@ -7,28 +7,41 @@ const getPermisosByRolId = async (req, res) => {
     const permisos = await PermisoRolModel.getPermisosByRolId(idRol);
     res.json(permisos);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('Error en getPermisosByRolId:', error);
+    res.status(500).json({ error: 'Error al obtener los permisos del rol' });
   }
 };
 
 const createPermisoRol = async (req, res) => {
   const { idRol } = req.params;
   const newPermisoRol = req.body;
+
+  if (req.user.IDROL !== 1) {
+    return res.status(403).json({ message: 'Usuario no autorizado' });
+  }
+
   try {
     await PermisoRolModel.createPermisoRol(idRol, newPermisoRol);
     res.status(201).json({ message: 'Permiso asignado exitosamente' });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('Error en createPermisoRol:', error);
+    res.status(500).json({ error: 'Error al asignar el permiso' });
   }
 };
 
 const deletePermisoRol = async (req, res) => {
   const { idRol, nro } = req.params;
+
+  if (req.user.IDROL !== 1) {
+    return res.status(403).json({ message: 'Usuario no autorizado' });
+  }
+
   try {
     await PermisoRolModel.deletePermisoRol(idRol, nro);
     res.status(200).json({ message: 'Permiso eliminado exitosamente' });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('Error en deletePermisoRol:', error);
+    res.status(500).json({ error: 'Error al eliminar el permiso' });
   }
 };
 
