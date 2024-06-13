@@ -12,8 +12,9 @@ const logoutUser = async (req, res) => {
     const fecha = now.format('YYYY-MM-DD');
     const hora = now.format('HH:mm:ss');
 
-    // Obtener el ID del usuario desde el token (asumiendo que has verificado el token antes de llegar aquí)
-    const userId = req.user.userId; // Asegúrate de tener este valor disponible
+    // Obtener el ID del usuario desde req.user
+    const userId = req.user.ID; // Asegúrate de tener este valor disponible
+    const userRole = req.user.IDROL;
 
     // Registrar la acción en la bitácora
     const registro = {
