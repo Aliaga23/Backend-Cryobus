@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const { getUserById } = require('../models/userModel');
+const { getPermisosByRolId } = require('../models/permisoRolModel');
 
 const authenticate = async (req, res, next) => {
   const token = req.headers['authorization'];
@@ -24,13 +25,20 @@ const authenticate = async (req, res, next) => {
   }
 };
 
+const authorize = (permisosRequeridos) => {
+  return async (req, res, next) => {
+    try {
+      const permisos = await getPermisosByRolId(req.user.IDROL);
+      const permisosIds = permisos.map((permiso) => permiso.IDPERMISO);
 
-const authorize = (role) => {
-  return (req, res, next) => {
-    if (req.user.IDROL !== role) {
-      return res.status(403).json({ message: 'Usuario no autorizado' });
+      const tienePermiso = permisosRequeridos.some((permisoRequerido) => permisosIds.includes(permisoRequerido));
+      if (!tienePermiso) {
+        return res.status(403).json({ message: 'Usuario no autorizado' });
+      }
+      next();
+    } catch (error) {
+      res.status(500).json({ message: 'Error al verificar permisos', error: error.message });
     }
-    next();
   };
 };
 
