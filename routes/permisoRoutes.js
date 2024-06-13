@@ -4,10 +4,13 @@ const { authenticate, authorize } = require('../middleware/auth');
 
 const router = express.Router();
 
-router.get('/', authenticate, authorize(1), getPermisos); // Solo admin puede ver permisos
-router.get('/:id', authenticate, authorize(1), getPermisoById);
-router.post('/', authenticate, authorize(1), createPermiso);
-router.put('/:id', authenticate, authorize(1), updatePermiso);
-router.delete('/:id', authenticate, authorize(1), deletePermiso);
+const VIEW_PERMISSIONS = 32;  // Permiso para ver
+const MANAGE_PERMISSIONS = 13;  // Permiso para gestionar
+
+router.get('/', authenticate, authorize(VIEW_PERMISSIONS), getPermisos);
+router.get('/:id', authenticate, authorize(VIEW_PERMISSIONS), getPermisoById);
+router.post('/', authenticate, authorize(MANAGE_PERMISSIONS), createPermiso);
+router.put('/:id', authenticate, authorize(MANAGE_PERMISSIONS), updatePermiso);
+router.delete('/:id', authenticate, authorize(MANAGE_PERMISSIONS), deletePermiso);
 
 module.exports = router;

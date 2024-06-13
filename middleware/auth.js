@@ -14,7 +14,7 @@ const authenticate = async (req, res, next) => {
     if (!user) {
       return res.status(401).json({ message: 'Usuario no encontrado' });
     }
-    req.user = user; // Asegúrate de que req.user contenga toda la información necesaria
+    req.user = user;
     next();
   } catch (error) {
     if (error.name === 'TokenExpiredError') {
@@ -25,13 +25,13 @@ const authenticate = async (req, res, next) => {
   }
 };
 
-const authorize = (permisosRequeridos) => {
+const authorize = (requiredPermissions) => {
   return async (req, res, next) => {
     try {
       const permisos = await getPermisosByRolId(req.user.IDROL);
       const permisosIds = permisos.map((permiso) => permiso.IDPERMISO);
 
-      const tienePermiso = permisosRequeridos.some((permisoRequerido) => permisosIds.includes(permisoRequerido));
+      const tienePermiso = requiredPermissions.some((permisoRequerido) => permisosIds.includes(permisoRequerido));
       if (!tienePermiso) {
         return res.status(403).json({ message: 'Usuario no autorizado' });
       }
@@ -42,4 +42,13 @@ const authorize = (permisosRequeridos) => {
   };
 };
 
-module.exports = { authenticate, authorize };
+const authorizeRole = (requiredRole) => {
+  return (req, res, next) => {
+    if (req.user.IDROL !== requiredRole) {
+      return res.status(403).json({ message: 'Usuario no autorizado' });
+    }
+    next();
+  };
+};
+
+module.exports = { authenticate, authorize, authorizeRole };
