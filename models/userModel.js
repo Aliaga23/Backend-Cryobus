@@ -48,10 +48,18 @@ const deleteUser = async (id) => {
   }
 };
 
+const updatePassword = async (userId, newPassword) => {
+  try {
+    await pool.query('UPDATE USUARIO SET CONTRA = ? WHERE ID = ?', [newPassword, userId]);
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
 module.exports = {
   getAllUsers,
   getUserById,
   createUser,
   updateUser,
-  deleteUser
+  deleteUser,
+  updatePassword
 };

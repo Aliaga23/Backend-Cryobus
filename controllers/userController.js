@@ -133,11 +133,36 @@ const getUserById = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+const changePassword = async (req, res) => {
+  const { userId } = req.user;
+  const { oldPassword, newPassword } = req.body;
+
+  try {
+    const user = await getUserById(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'Usuario no encontrado' });
+    }
+
+    const isMatch = await bcrypt.compare(oldPassword, user.CONTRA);
+    if (!isMatch) {
+      return res.status(401).json({ message: 'Contraseña antigua incorrecta' });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    await updatePassword(userId, hashedPassword);
+
+    res.status(200).json({ message: 'Contraseña actualizada correctamente' });
+  } catch (error) {
+    console.error('Error al cambiar la contraseña:', error);
+    res.status(500).json({ message: 'Error al cambiar la contraseña', error });
+  }
+};
 
 module.exports = {
   getUsers,
   createUser,
   updateUser,
   deleteUser,
-  getUserById
+  getUserById,
+  changePassword
 };
