@@ -20,7 +20,10 @@ const paqueteRoutes = require('./routes/paqueteRoutes');
 const notaEntregaRoutes = require('./routes/notaEntregaRoutes');
 const recepcionRoutes = require('./routes/recepcionRouter');
 const estadoEntregaRoutes = require('./routes/estadoEntregaRoutes');
+const camionRoutes = require('./routes/camionRoutes');
+
 const bitacoraRoutes = require('./routes/bitacoraRoutes');
+
 const { setIO } = require('./controllers/socketController'); // Nuevo controlador para configurar io
 
 const app = express();
@@ -55,6 +58,8 @@ app.use('/api/paquetes', paqueteRoutes);
 app.use('/api/notasEntrega', notaEntregaRoutes);
 app.use('/api/recepciones', recepcionRoutes);
 app.use('/api/estadosEntrega', estadoEntregaRoutes);
+
+app.use('/api/camion', camionRoutes);
 app.use('/api/bitacora', bitacoraRoutes);
 
 // Ruta de prueba
