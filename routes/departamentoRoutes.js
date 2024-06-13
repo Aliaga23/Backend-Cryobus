@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const departamentoController = require('../controllers/departamentoController');
+const { authenticate, authorize } = require('../middleware/auth');
 
-router.get('/', departamentoController.getDepartamentos);
-router.post('/', departamentoController.createDepartamento);
-router.put('/:nombre', departamentoController.updateDepartamento);
-router.delete('/:nombre', departamentoController.deleteDepartamento);
+router.get('/', authenticate, authorize([3]),departamentoController.getDepartamentos);
+router.post('/', authenticate, authorize([3]), departamentoController.createDepartamento);
+router.put('/:nombre', authenticate, authorize([3]), departamentoController.updateDepartamento);
+router.delete('/:nombre', authenticate, authorize([3]), departamentoController.deleteDepartamento);
 
 module.exports = router;
