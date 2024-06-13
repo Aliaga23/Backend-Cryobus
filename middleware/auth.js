@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const { getUserById } = require('../models/userModel');
-const { getPermisosByRolId } = require('../models/permisoRolModel');
+const { getPermisosByUserId } = require('../models/permisoModel');
 
 const authenticate = async (req, res, next) => {
   const token = req.headers['authorization'];
@@ -15,40 +15,28 @@ const authenticate = async (req, res, next) => {
       return res.status(401).json({ message: 'Usuario no encontrado' });
     }
     req.user = user;
+
+    // Obtener permisos del usuario
+    const permisos = await getPermisosByUserId(user.ID);
+    req.user.permisos = permisos.map(permiso => permiso.IDPERMISO);
+
     next();
   } catch (error) {
-    if (error.name === 'TokenExpiredError') {
-      res.status(401).json({ message: 'Token expirado, por favor inicie sesión nuevamente.' });
-    } else {
-      res.status(500).json({ message: 'Error en la autenticación', error: error.message });
-    }
+    res.status(500).json({ message: 'Error en la autenticación', error });
   }
 };
 
-const authorize = (requiredPermissions) => {
-  return async (req, res, next) => {
-    try {
-      const permisos = await getPermisosByRolId(req.user.IDROL);
-      const permisosIds = permisos.map((permiso) => permiso.IDPERMISO);
-
-      const tienePermiso = requiredPermissions.some((permisoRequerido) => permisosIds.includes(permisoRequerido));
-      if (!tienePermiso) {
-        return res.status(403).json({ message: 'Usuario no autorizado' });
-      }
-      next();
-    } catch (error) {
-      res.status(500).json({ message: 'Error al verificar permisos', error: error.message });
-    }
-  };
-};
-
-const authorizeRole = (requiredRole) => {
+const authorize = (requiredPermisos) => {
   return (req, res, next) => {
-    if (req.user.IDROL !== requiredRole) {
+    if (!req.user || !req.user.permisos) {
+      return res.status(403).json({ message: 'Usuario no autorizado' });
+    }
+    const hasPermission = requiredPermisos.some(permiso => req.user.permisos.includes(permiso));
+    if (!hasPermission) {
       return res.status(403).json({ message: 'Usuario no autorizado' });
     }
     next();
   };
 };
 
-module.exports = { authenticate, authorize, authorizeRole };
+module.exports = { authenticate, authorize };
