@@ -1,9 +1,9 @@
+const jwt = require('jsonwebtoken');
 const { getUserById } = require('../models/userModel');
 const bcrypt = require('bcrypt');
 const { addRegistro } = require('../models/bitacoraModel');
 const moment = require('moment-timezone');
-const jwt = require('jsonwebtoken');
-const { getIO } = require('./socketController'); // Importar getIO para obtener io
+const { getIO } = require('./socketController');
 
 const loginUser = async (req, res) => {
   const { id, pass } = req.body;
@@ -21,7 +21,7 @@ const loginUser = async (req, res) => {
     const token = jwt.sign(
       { userId: user.ID, role: user.IDROL },
       process.env.JWT_SECRET,
-      { expiresIn: '3h' }
+      { expiresIn: '12h' } // Cambia este valor a 12 horas o al tiempo que prefieras
     );
 
     // Enviar respuesta de éxito antes de ejecutar la lógica adicional

@@ -16,10 +16,15 @@ const authenticate = async (req, res, next) => {
     req.user = user; // Asegúrate de que req.user contenga toda la información necesaria
     next();
   } catch (error) {
-    console.error('Error en authenticate:', error);
-    res.status(500).json({ message: 'Error en la autenticación', error: error.message });
+    if (error.name === 'TokenExpiredError') {
+      res.status(401).json({ message: 'Token expirado, por favor inicie sesión nuevamente.' });
+    } else {
+      res.status(500).json({ message: 'Error en la autenticación', error: error.message });
+    }
   }
 };
+
+
 const authorize = (role) => {
   return (req, res, next) => {
     if (req.user.IDROL !== role) {
