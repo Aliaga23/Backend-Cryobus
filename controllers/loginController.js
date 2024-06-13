@@ -21,7 +21,7 @@ const loginUser = async (req, res) => {
     const token = jwt.sign(
       { userId: user.ID, role: user.IDROL },
       process.env.JWT_SECRET,
-      { expiresIn: '1h' }
+      { expiresIn: '3h' }
     );
 
     // Enviar respuesta de éxito antes de ejecutar la lógica adicional
