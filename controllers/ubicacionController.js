@@ -1,48 +1,63 @@
-const ubicacionModel = require('../models/ubicacionModel');
+// controllers/ubicacionController.js
+const UbicacionModel = require('../models/ubicacionModel');
 
 const getUbicaciones = async (req, res) => {
   try {
-    const ubicaciones = await ubicacionModel.getUbicaciones();
+    const ubicaciones = await UbicacionModel.getAllUbicaciones();
     res.json(ubicaciones);
   } catch (error) {
-    console.error('Error al obtener ubicaciones:', error);
-    res.status(500).json({ error: 'Error al obtener ubicaciones' });
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const getUbicacionById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const ubicacion = await UbicacionModel.getUbicacionById(id);
+    if (!ubicacion) {
+      return res.status(404).json({ error: 'Ubicación no encontrada' });
+    }
+    res.json(ubicacion);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 };
 
 const createUbicacion = async (req, res) => {
+  const newUbicacion = req.body;
   try {
-    const newUbicacion = await ubicacionModel.createUbicacion(req.body);
-    res.status(201).json(newUbicacion);
+    await UbicacionModel.createUbicacion(newUbicacion);
+    res.status(201).json({ message: 'Ubicación creada exitosamente' });
   } catch (error) {
-    console.error('Error al crear ubicacion:', error);
-    res.status(500).json({ error: 'Error al crear ubicacion' });
+    res.status(500).json({ error: error.message });
   }
 };
 
 const updateUbicacion = async (req, res) => {
+  const { id } = req.params;
+  const updatedUbicacion = req.body;
   try {
-    const updatedUbicacion = await ubicacionModel.updateUbicacion(req.params.id, req.body);
-    res.json(updatedUbicacion);
+    await UbicacionModel.updateUbicacion(id, updatedUbicacion);
+    res.status(200).json({ message: 'Ubicación actualizada exitosamente' });
   } catch (error) {
-    console.error('Error al actualizar ubicacion:', error);
-    res.status(500).json({ error: 'Error al actualizar ubicacion' });
+    res.status(500).json({ error: error.message });
   }
 };
 
 const deleteUbicacion = async (req, res) => {
+  const { id } = req.params;
   try {
-    await ubicacionModel.deleteUbicacion(req.params.id);
-    res.status(204).json();
+    await UbicacionModel.deleteUbicacion(id);
+    res.status(200).json({ message: 'Ubicación eliminada exitosamente' });
   } catch (error) {
-    console.error('Error al eliminar ubicacion:', error);
-    res.status(500).json({ error: 'Error al eliminar ubicacion' });
+    res.status(500).json({ error: error.message });
   }
 };
 
 module.exports = {
   getUbicaciones,
+  getUbicacionById,
   createUbicacion,
   updateUbicacion,
-  deleteUbicacion,
+  deleteUbicacion
 };

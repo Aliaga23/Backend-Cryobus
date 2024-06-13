@@ -1,10 +1,14 @@
+// routes/ubicacionRoutes.js
 const express = require('express');
-const router = express.Router();
-const ubicacionController = require('../controllers/ubicacionController');
+const { getUbicaciones, getUbicacionById, createUbicacion, updateUbicacion, deleteUbicacion } = require('../controllers/ubicacionController');
+const { authenticate, authorize } = require('../middleware/auth');
 
-router.get('/', ubicacionController.getUbicaciones);
-router.post('/', ubicacionController.createUbicacion);
-router.put('/:id', ubicacionController.updateUbicacion);
-router.delete('/:id', ubicacionController.deleteUbicacion);
+const router = express.Router();
+
+router.get('/', authenticate, authorize([3]), getUbicaciones); // Ver ubicaciones
+router.get('/:id', authenticate, authorize([3]), getUbicacionById); // Ver ubicación específica
+router.post('/', authenticate, authorize([3]), createUbicacion); // Crear ubicación
+router.put('/:id', authenticate, authorize([3]), updateUbicacion); // Actualizar ubicación
+router.delete('/:id', authenticate, authorize([3]), deleteUbicacion); // Eliminar ubicación
 
 module.exports = router;
