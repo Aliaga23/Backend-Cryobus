@@ -11,10 +11,10 @@ const getAllRegistros = async () => {
 
 const addRegistro = async (registro) => {
   try {
-    const { IDACCION, IDUSUARIO, IP, FECHA, HORAACCION, ELEMENTOMODIFICADO } = registro;
+    const { IDACCION, IDUSUARIO, IP, FECHA, HORAACCION, ELEMENTOMODIFICADO, DETALLE } = registro;
     const [result] = await pool.query(
-      'INSERT INTO REGISTROACCION (IDACCION, IDUSUARIO, IP, FECHA, HORAACCION, ELEMENTOMODIFICADO) VALUES (?, ?, ?, ?, ?, ?)',
-      [IDACCION, IDUSUARIO, IP, FECHA, HORAACCION, ELEMENTOMODIFICADO]
+      'INSERT INTO REGISTROACCION (IDACCION, IDUSUARIO, IP, FECHA, HORAACCION, ELEMENTOMODIFICADO, DETALLE) VALUES (?, ?, ?, ?, ?, ?, ?)',
+      [IDACCION, IDUSUARIO, IP, FECHA, HORAACCION, ELEMENTOMODIFICADO, DETALLE]
     );
     return result.insertId;
   } catch (error) {
