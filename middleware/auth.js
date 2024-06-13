@@ -6,14 +6,14 @@ const authenticate = async (req, res, next) => {
   if (!token) {
     return res.status(401).json({ message: 'Usuario no autenticado' });
   }
-  
+
   try {
     const decoded = jwt.verify(token.split(' ')[1], process.env.JWT_SECRET);
     const user = await getUserById(decoded.userId);
     if (!user) {
       return res.status(401).json({ message: 'Usuario no encontrado' });
     }
-    req.user = user;
+    req.user = user; // Asegúrate de que req.user contenga toda la información necesaria
     next();
   } catch (error) {
     res.status(500).json({ message: 'Error en la autenticación', error });
