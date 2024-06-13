@@ -26,6 +26,7 @@ const departamentoRoutes = require('./routes/departamentoRoutes');
 const localidadRoutes = require('./routes/localidadRoutes');
 const ubicacionRoutes = require('./routes/ubicacionRoutes');
 const notaTrasladoRoutes = require('./routes/notaTrasladoRoutes');
+const planRutaRoutes = require('./routes/planRutaRoutes');
 
 const bitacoraRoutes = require('./routes/bitacoraRoutes');
 
@@ -70,6 +71,7 @@ app.use('/api/bitacora', bitacoraRoutes);
 app.use('/api/localidades', localidadRoutes);
 app.use('/api/ubicaciones', ubicacionRoutes);
 app.use('/api/notasTraslado', notaTrasladoRoutes);
+app.use('/api/planRuta', planRutaRoutes);
 
 // Ruta de prueba
 app.get('/ping', async (req, res) => {
