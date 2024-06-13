@@ -28,7 +28,7 @@ const ubicacionRoutes = require('./routes/ubicacionRoutes');
 const notaTrasladoRoutes = require('./routes/notaTrasladoRoutes');
 const planRutaRoutes = require('./routes/planRutaRoutes');
 const tipoPaqueteRoutes = require('./routes/tipoPaqueteRoutes');
-
+const logoutRoutes = require('./routes/logoutRoutes')
 const bitacoraRoutes = require('./routes/bitacoraRoutes');
 
 const { setIO } = require('./controllers/socketController'); // Nuevo controlador para configurar io
@@ -74,6 +74,7 @@ app.use('/api/ubicaciones', ubicacionRoutes);
 app.use('/api/notasTraslado', notaTrasladoRoutes);
 app.use('/api/planRuta', planRutaRoutes);
 app.use('/api/tipoPaquete', tipoPaqueteRoutes);
+app.use('/api/logout', logoutRoutes);
 
 // Ruta de prueba
 app.get('/ping', async (req, res) => {
