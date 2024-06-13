@@ -1,3 +1,4 @@
+// controllers/permisoRolController.js
 const PermisoRolModel = require('../models/permisoRolModel');
 
 const getPermisosByRolId = async (req, res) => {
@@ -6,7 +7,8 @@ const getPermisosByRolId = async (req, res) => {
     const permisos = await PermisoRolModel.getPermisosByRolId(idRol);
     res.json(permisos);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('Error en getPermisosByRolId:', error);
+    res.status(500).json({ error: 'Error al obtener los permisos del rol' });
   }
 };
 
@@ -14,7 +16,6 @@ const createPermisoRol = async (req, res) => {
   const { idRol } = req.params;
   const newPermisoRol = req.body;
   
-  // Verifica que el rol del usuario es 1 (admin)
   if (req.user.IDROL !== 1) {
     return res.status(403).json({ message: 'Usuario no autorizado' });
   }
@@ -23,14 +24,14 @@ const createPermisoRol = async (req, res) => {
     await PermisoRolModel.createPermisoRol(idRol, newPermisoRol);
     res.status(201).json({ message: 'Permiso asignado exitosamente' });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('Error en createPermisoRol:', error);
+    res.status(500).json({ error: 'Error al asignar el permiso' });
   }
 };
 
 const deletePermisoRol = async (req, res) => {
   const { idRol, nro } = req.params;
   
-  // Verifica que el rol del usuario es 1 (admin)
   if (req.user.IDROL !== 1) {
     return res.status(403).json({ message: 'Usuario no autorizado' });
   }
@@ -39,7 +40,8 @@ const deletePermisoRol = async (req, res) => {
     await PermisoRolModel.deletePermisoRol(idRol, nro);
     res.status(200).json({ message: 'Permiso eliminado exitosamente' });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('Error en deletePermisoRol:', error);
+    res.status(500).json({ error: 'Error al eliminar el permiso' });
   }
 };
 

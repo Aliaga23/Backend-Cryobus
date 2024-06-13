@@ -1,45 +1,32 @@
-const PermisoRolModel = require('../models/permisoRolModel');
+// models/permisoRolModel.js
+const { pool } = require('../db');
 
-const getPermisosByRolId = async (req, res) => {
-  const { idRol } = req.params;
+const getPermisosByRolId = async (idRol) => {
   try {
-    const permisos = await PermisoRolModel.getPermisosByRolId(idRol);
-    res.json(permisos);
+    const [rows] = await pool.query('SELECT * FROM DETALLEROLPERMISO WHERE IDROL = ?', [idRol]);
+    return rows;
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('Error en getPermisosByRolId:', error);
+    throw new Error(error.message);
   }
 };
 
-const createPermisoRol = async (req, res) => {
-  const { idRol } = req.params;
-  const newPermisoRol = req.body;
-  
-  // Verifica que el rol del usuario es 1 (admin)
-  if (req.user.IDROL !== 1) {
-    return res.status(403).json({ message: 'Usuario no autorizado' });
-  }
-
+const createPermisoRol = async (idRol, permisoRol) => {
+  const { nro, idPermiso } = permisoRol;
   try {
-    await PermisoRolModel.createPermisoRol(idRol, newPermisoRol);
-    res.status(201).json({ message: 'Permiso asignado exitosamente' });
+    await pool.query('INSERT INTO DETALLEROLPERMISO (IDROL, NRO, IDPERMISO) VALUES (?, ?, ?)', [idRol, nro, idPermiso]);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('Error en createPermisoRol:', error);
+    throw new Error(error.message);
   }
 };
 
-const deletePermisoRol = async (req, res) => {
-  const { idRol, nro } = req.params;
-  
-  // Verifica que el rol del usuario es 1 (admin)
-  if (req.user.IDROL !== 1) {
-    return res.status(403).json({ message: 'Usuario no autorizado' });
-  }
-
+const deletePermisoRol = async (idRol, nro) => {
   try {
-    await PermisoRolModel.deletePermisoRol(idRol, nro);
-    res.status(200).json({ message: 'Permiso eliminado exitosamente' });
+    await pool.query('DELETE FROM DETALLEROLPERMISO WHERE IDROL = ? AND NRO = ?', [idRol, nro]);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('Error en deletePermisoRol:', error);
+    throw new Error(error.message);
   }
 };
 
