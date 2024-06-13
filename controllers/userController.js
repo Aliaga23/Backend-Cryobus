@@ -2,6 +2,7 @@ const UserModel = require('../models/userModel');
 const { addRegistro } = require('../models/bitacoraModel');
 const moment = require('moment-timezone');
 const { getIO } = require('./socketController'); // Importar getIO para obtener io
+const bcrypt = require('bcrypt');
 
 const getUsers = async (req, res) => {
   try {
@@ -133,12 +134,13 @@ const getUserById = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
 const changePassword = async (req, res) => {
-  const userId = req.user.ID; // Cambié `req.user.userId` a `req.user.ID` para alinearlo con la nomenclatura común
   const { oldPassword, newPassword } = req.body;
+  const userId = req.user.ID; // Obtener el ID del usuario desde req.user
 
   try {
-    const user = await getUserById(userId);
+    const user = await UserModel.getUserById(userId);
     if (!user) {
       return res.status(404).json({ message: 'Usuario no encontrado' });
     }
@@ -149,15 +151,15 @@ const changePassword = async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(newPassword, 10);
-    await updatePassword(userId, hashedPassword);
+    await UserModel.updatePassword(userId, hashedPassword);
 
+    
     res.status(200).json({ message: 'Contraseña actualizada correctamente' });
   } catch (error) {
     console.error('Error al cambiar la contraseña:', error);
     res.status(500).json({ message: 'Error al cambiar la contraseña', error });
   }
 };
-
 
 module.exports = {
   getUsers,
