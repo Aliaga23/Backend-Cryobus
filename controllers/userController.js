@@ -134,7 +134,7 @@ const getUserById = async (req, res) => {
   }
 };
 const changePassword = async (req, res) => {
-  const { userId } = req.user;
+  const userId = req.user.ID; // Cambié `req.user.userId` a `req.user.ID` para alinearlo con la nomenclatura común
   const { oldPassword, newPassword } = req.body;
 
   try {
@@ -157,6 +157,7 @@ const changePassword = async (req, res) => {
     res.status(500).json({ message: 'Error al cambiar la contraseña', error });
   }
 };
+
 
 module.exports = {
   getUsers,

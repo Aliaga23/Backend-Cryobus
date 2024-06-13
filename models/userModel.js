@@ -1,4 +1,3 @@
-// models/userModel.js
 const { pool } = require('../db');
 const bcrypt = require('bcrypt');
 
@@ -55,6 +54,7 @@ const updatePassword = async (userId, newPassword) => {
     throw new Error(error.message);
   }
 };
+
 module.exports = {
   getAllUsers,
   getUserById,
