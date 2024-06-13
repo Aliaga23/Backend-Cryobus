@@ -21,6 +21,7 @@ const notaEntregaRoutes = require('./routes/notaEntregaRoutes');
 const recepcionRoutes = require('./routes/recepcionRouter');
 const estadoEntregaRoutes = require('./routes/estadoEntregaRoutes');
 const camionRoutes = require('./routes/camionRoutes');
+const tipoCamionRoutes = require('./routes/tipoCamionRoutes');
 
 const bitacoraRoutes = require('./routes/bitacoraRoutes');
 
@@ -58,8 +59,9 @@ app.use('/api/paquetes', paqueteRoutes);
 app.use('/api/notasEntrega', notaEntregaRoutes);
 app.use('/api/recepciones', recepcionRoutes);
 app.use('/api/estadosEntrega', estadoEntregaRoutes);
+app.use('/api/tiposCamion', tipoCamionRoutes);
 
-app.use('/api/camion', camionRoutes);
+app.use('/api/camiones', camionRoutes);
 app.use('/api/bitacora', bitacoraRoutes);
 
 // Ruta de prueba

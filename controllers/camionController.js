@@ -50,21 +50,10 @@ const deleteCamion = async (req, res) => {
   }
 };
 
-const getTiposCamion = async (req, res) => {
-  try {
-    const tiposCamion = await camionModel.getTiposCamion();
-    res.json(tiposCamion);
-  } catch (error) {
-    console.error('Error al obtener tipos de camión:', error);
-    res.status(500).json({ error: 'Error al obtener tipos de camión' });
-  }
-};
-
 module.exports = {
   getCamiones,
   getCamionById,
   createCamion,
   updateCamion,
   deleteCamion,
-  getTiposCamion,
 };
