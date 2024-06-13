@@ -16,10 +16,10 @@ const authenticate = async (req, res, next) => {
     req.user = user; // Asegúrate de que req.user contenga toda la información necesaria
     next();
   } catch (error) {
-    res.status(500).json({ message: 'Error en la autenticación', error });
+    console.error('Error en authenticate:', error);
+    res.status(500).json({ message: 'Error en la autenticación', error: error.message });
   }
 };
-
 const authorize = (role) => {
   return (req, res, next) => {
     if (req.user.IDROL !== role) {

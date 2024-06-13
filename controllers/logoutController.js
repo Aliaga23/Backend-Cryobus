@@ -13,7 +13,11 @@ const logoutUser = async (req, res) => {
     const hora = now.format('HH:mm:ss');
 
     // Obtener el ID del usuario desde req.user
-    const userId = req.user.ID; // Asegúrate de tener este valor disponible
+    if (!req.user) {
+      throw new Error('Usuario no autenticado');
+    }
+
+    const userId = req.user.ID;
     const userRole = req.user.IDROL;
 
     // Registrar la acción en la bitácora
@@ -25,6 +29,7 @@ const logoutUser = async (req, res) => {
       HORAACCION: hora,
       ELEMENTOMODIFICADO: 'LOGOUT'
     };
+
     const registroId = await addRegistro(registro);
 
     // Emitir evento de nueva acción
@@ -35,7 +40,7 @@ const logoutUser = async (req, res) => {
     res.status(200).json({ message: 'Logout successful' });
   } catch (error) {
     console.error('Error en logoutUser:', error);
-    res.status(500).json({ message: 'Error al cerrar sesión', error });
+    res.status(500).json({ message: 'Error al cerrar sesión', error: error.message });
   }
 };
 

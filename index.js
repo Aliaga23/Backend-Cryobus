@@ -28,7 +28,7 @@ const ubicacionRoutes = require('./routes/ubicacionRoutes');
 const notaTrasladoRoutes = require('./routes/notaTrasladoRoutes');
 const planRutaRoutes = require('./routes/planRutaRoutes');
 const tipoPaqueteRoutes = require('./routes/tipoPaqueteRoutes');
-const logoutRoutes = require('./routes/logoutRoutes')
+const logoutRoutes = require('./routes/logoutRoutes');
 const bitacoraRoutes = require('./routes/bitacoraRoutes');
 
 const { setIO } = require('./controllers/socketController'); // Nuevo controlador para configurar io

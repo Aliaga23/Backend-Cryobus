@@ -1,6 +1,6 @@
 const express = require('express');
 const { logoutUser } = require('../controllers/logoutController');
-const { authenticate } = require('../middleware/auth'); // Middleware de autenticación para proteger la ruta
+const { authenticate } = require('../middleware/auth');
 
 const router = express.Router();
 
