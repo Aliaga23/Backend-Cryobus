@@ -24,12 +24,12 @@ const camionRoutes = require('./routes/camionRoutes');
 const tipoCamionRoutes = require('./routes/tipoCamionRoutes');
 const departamentoRoutes = require('./routes/departamentoRoutes');
 const localidadRoutes = require('./routes/localidadRoutes');
-const ubicacionRoutes = require('./routes/ubicacionRoutes');
 const notaTrasladoRoutes = require('./routes/notaTrasladoRoutes');
 const planRutaRoutes = require('./routes/planRutaRoutes');
 const tipoPaqueteRoutes = require('./routes/tipoPaqueteRoutes');
 const logoutRoutes = require('./routes/logoutRoutes');
 const bitacoraRoutes = require('./routes/bitacoraRoutes');
+const direccionRoutes = require('./routes/direccionRouter');
 
 const { setIO } = require('./controllers/socketController'); // Nuevo controlador para configurar io
 
@@ -70,11 +70,11 @@ app.use('/api/camiones', camionRoutes);
 app.use('/api/departamentos', departamentoRoutes);
 app.use('/api/bitacora', bitacoraRoutes);
 app.use('/api/localidades', localidadRoutes);
-app.use('/api/ubicaciones', ubicacionRoutes);
 app.use('/api/notasTraslado', notaTrasladoRoutes);
 app.use('/api/planRuta', planRutaRoutes);
 app.use('/api/tipoPaquete', tipoPaqueteRoutes);
 app.use('/api/logout', logoutRoutes);
+app.use('/api/direcciones', direccionRoutes); // Ruta nueva
 
 // Ruta de prueba
 app.get('/ping', async (req, res) => {
