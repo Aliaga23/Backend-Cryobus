@@ -30,7 +30,8 @@ const tipoPaqueteRoutes = require('./routes/tipoPaqueteRoutes');
 const logoutRoutes = require('./routes/logoutRoutes');
 const bitacoraRoutes = require('./routes/bitacoraRoutes');
 const direccionRoutes = require('./routes/direccionRouter');
-
+const conductorRoutes = require('./routes/conductorRoutes');
+const detalleConductorRoutes = require('./routes/detalleConductorRoutes');
 const { setIO } = require('./controllers/socketController'); // Nuevo controlador para configurar io
 
 const app = express();
@@ -75,7 +76,8 @@ app.use('/api/planRuta', planRutaRoutes);
 app.use('/api/tipoPaquete', tipoPaqueteRoutes);
 app.use('/api/logout', logoutRoutes);
 app.use('/api/direcciones', direccionRoutes); // Ruta nueva
-
+app.use('/api/conductores', conductorRoutes);
+app.use('/api/detalleconductor', detalleConductorRoutes);
 // Ruta de prueba
 app.get('/ping', async (req, res) => {
   try {
