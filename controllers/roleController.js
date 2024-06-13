@@ -25,6 +25,12 @@ const getRoleById = async (req, res) => {
 
 const createRole = async (req, res) => {
   const newRole = req.body;
+
+  // Verifica que el rol del usuario es 1 (admin)
+  if (req.user.IDROL !== 1) {
+    return res.status(403).json({ message: 'Usuario no autorizado' });
+  }
+
   try {
     await RoleModel.createRole(newRole);
     res.status(201).json({ message: 'Role created successfully' });
@@ -36,6 +42,12 @@ const createRole = async (req, res) => {
 const updateRole = async (req, res) => {
   const { id } = req.params;
   const updatedRole = req.body;
+
+  // Verifica que el rol del usuario es 1 (admin)
+  if (req.user.IDROL !== 1) {
+    return res.status(403).json({ message: 'Usuario no autorizado' });
+  }
+
   try {
     await RoleModel.updateRole(id, updatedRole);
     res.status(200).json({ message: 'Role updated successfully' });
@@ -46,6 +58,12 @@ const updateRole = async (req, res) => {
 
 const deleteRole = async (req, res) => {
   const { id } = req.params;
+
+  // Verifica que el rol del usuario es 1 (admin)
+  if (req.user.IDROL !== 1) {
+    return res.status(403).json({ message: 'Usuario no autorizado' });
+  }
+
   try {
     await RoleModel.deleteRole(id);
     res.status(200).json({ message: 'Role deleted successfully' });
