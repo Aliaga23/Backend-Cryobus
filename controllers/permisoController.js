@@ -1,4 +1,3 @@
-// controllers/permisoController.js
 const PermisoModel = require('../models/permisoModel');
 
 const getPermisos = async (req, res) => {
@@ -25,6 +24,12 @@ const getPermisoById = async (req, res) => {
 
 const createPermiso = async (req, res) => {
   const newPermiso = req.body;
+  
+  // Verifica que el rol del usuario es 1 (admin)
+  if (req.user.IDROL !== 1) {
+    return res.status(403).json({ message: 'Usuario no autorizado' });
+  }
+
   try {
     await PermisoModel.createPermiso(newPermiso);
     res.status(201).json({ message: 'Permiso created successfully' });
@@ -36,6 +41,12 @@ const createPermiso = async (req, res) => {
 const updatePermiso = async (req, res) => {
   const { id } = req.params;
   const updatedPermiso = req.body;
+  
+  // Verifica que el rol del usuario es 1 (admin)
+  if (req.user.IDROL !== 1) {
+    return res.status(403).json({ message: 'Usuario no autorizado' });
+  }
+
   try {
     await PermisoModel.updatePermiso(id, updatedPermiso);
     res.status(200).json({ message: 'Permiso updated successfully' });
@@ -46,6 +57,12 @@ const updatePermiso = async (req, res) => {
 
 const deletePermiso = async (req, res) => {
   const { id } = req.params;
+  
+  // Verifica que el rol del usuario es 1 (admin)
+  if (req.user.IDROL !== 1) {
+    return res.status(403).json({ message: 'Usuario no autorizado' });
+  }
+
   try {
     await PermisoModel.deletePermiso(id);
     res.status(200).json({ message: 'Permiso deleted successfully' });

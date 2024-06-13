@@ -1,29 +1,45 @@
-// models/permisoRolModel.js
-const { pool } = require('../db');
+const PermisoRolModel = require('../models/permisoRolModel');
 
-const getPermisosByRolId = async (idRol) => {
+const getPermisosByRolId = async (req, res) => {
+  const { idRol } = req.params;
   try {
-    const [rows] = await pool.query('SELECT * FROM DETALLEROLPERMISO WHERE IDROL = ?', [idRol]);
-    return rows;
+    const permisos = await PermisoRolModel.getPermisosByRolId(idRol);
+    res.json(permisos);
   } catch (error) {
-    throw new Error(error.message);
+    res.status(500).json({ error: error.message });
   }
 };
 
-const createPermisoRol = async (idRol, permisoRol) => {
-  const { nro, idPermiso } = permisoRol;
+const createPermisoRol = async (req, res) => {
+  const { idRol } = req.params;
+  const newPermisoRol = req.body;
+  
+  // Verifica que el rol del usuario es 1 (admin)
+  if (req.user.IDROL !== 1) {
+    return res.status(403).json({ message: 'Usuario no autorizado' });
+  }
+
   try {
-    await pool.query('INSERT INTO DETALLEROLPERMISO (IDROL, NRO, IDPERMISO) VALUES (?, ?, ?)', [idRol, nro, idPermiso]);
+    await PermisoRolModel.createPermisoRol(idRol, newPermisoRol);
+    res.status(201).json({ message: 'Permiso asignado exitosamente' });
   } catch (error) {
-    throw new Error(error.message);
+    res.status(500).json({ error: error.message });
   }
 };
 
-const deletePermisoRol = async (idRol, nro) => {
+const deletePermisoRol = async (req, res) => {
+  const { idRol, nro } = req.params;
+  
+  // Verifica que el rol del usuario es 1 (admin)
+  if (req.user.IDROL !== 1) {
+    return res.status(403).json({ message: 'Usuario no autorizado' });
+  }
+
   try {
-    await pool.query('DELETE FROM DETALLEROLPERMISO WHERE IDROL = ? AND NRO = ?', [idRol, nro]);
+    await PermisoRolModel.deletePermisoRol(idRol, nro);
+    res.status(200).json({ message: 'Permiso eliminado exitosamente' });
   } catch (error) {
-    throw new Error(error.message);
+    res.status(500).json({ error: error.message });
   }
 };
 

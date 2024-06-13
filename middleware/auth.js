@@ -1,3 +1,4 @@
+// middleware/auth.js
 const jwt = require('jsonwebtoken');
 const { getUserById } = require('../models/userModel');
 const { getPermisosByUserId } = require('../models/permisoModel');
