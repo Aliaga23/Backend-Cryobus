@@ -1,12 +1,12 @@
-// 3ero routes/roleRoutes.js
-const express = require('express'); // framework de nodejs para construir api's y apps webs
-const { getCamions, createCamion, updateCamion, deleteCamion } = require('../controllers/camionController');
-                                                     //obteniendo todo desde source controller
-const router = express.Router();     //.router objeto de express para definir rutas 
+const express = require('express');
+const router = express.Router();
+const camionController = require('../controllers/camionController');
 
-router.get('/', getCamions);         // get = obtener todo los "roles" del path asignado a ese router
-router.post('/', createCamion);      // post = crear nuevos "roles"(recursos) al path asignado
-router.put('/:nro', updateCamion);    // actualiza desde un parametro nro
-router.delete('/:nro', deleteCamion);
+router.get('/', camionController.getCamiones);
+router.get('/:id', camionController.getCamionById);
+router.post('/', camionController.createCamion);
+router.put('/:id', camionController.updateCamion);
+router.delete('/:id', camionController.deleteCamion);
+router.get('/tipos', camionController.getTiposCamion); // Nueva ruta para obtener tipos de camión
 
 module.exports = router;

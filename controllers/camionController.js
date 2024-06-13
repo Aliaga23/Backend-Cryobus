@@ -1,51 +1,70 @@
-// 2do controladores 
 const camionModel = require('../models/camionModel');
 
-const getCamions = async (req, res) => { // req = leer, res = escribir
-    try {
-      const Camions = await camionModel.getAllCamions();
-      res.json(Camions);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  };
-  
-  
-  const createCamion = async (req, res) => {
-    const newCamion = req.body;
-    try {
-      await camionModel.createCamion(newCamion);
-      res.status(201).json({ message: 'Camion creado exitosamente' });
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  };
-  
-  const updateCamion = async (req, res) => {
-    const { nro } = req.params; // destructuracion de javaS
-    const updatedCamion = req.body;
-    try {
-      await camionModel.updateCamion(nro, updatedCamion);
-      res.status(200).json({ message: 'Camion actualizado exitosamente' });
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  };
-  
-  const deleteCamion = async (req, res) => {
-    const { nro } = req.params;
-    try {
-      await camionModel.deleteCamion(nro);
-      res.status(200).json({ message: 'Camion eliminado exitosamente' });
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  };
-  
-  module.exports = {
-    getCamions,
-    createCamion,
-    updateCamion,
-    deleteCamion,
-  };
-  
+const getCamiones = async (req, res) => {
+  try {
+    const camiones = await camionModel.getCamiones();
+    res.json(camiones);
+  } catch (error) {
+    console.error('Error al obtener camiones:', error);
+    res.status(500).json({ error: 'Error al obtener camiones' });
+  }
+};
+
+const getCamionById = async (req, res) => {
+  try {
+    const camion = await camionModel.getCamionById(req.params.id);
+    res.json(camion);
+  } catch (error) {
+    console.error('Error al obtener camión:', error);
+    res.status(500).json({ error: 'Error al obtener camión' });
+  }
+};
+
+const createCamion = async (req, res) => {
+  try {
+    const newCamion = await camionModel.createCamion(req.body);
+    res.status(201).json(newCamion);
+  } catch (error) {
+    console.error('Error al crear camión:', error);
+    res.status(500).json({ error: 'Error al crear camión' });
+  }
+};
+
+const updateCamion = async (req, res) => {
+  try {
+    const updatedCamion = await camionModel.updateCamion(req.params.id, req.body);
+    res.json(updatedCamion);
+  } catch (error) {
+    console.error('Error al actualizar camión:', error);
+    res.status(500).json({ error: 'Error al actualizar camión' });
+  }
+};
+
+const deleteCamion = async (req, res) => {
+  try {
+    await camionModel.deleteCamion(req.params.id);
+    res.status(204).json();
+  } catch (error) {
+    console.error('Error al eliminar camión:', error);
+    res.status(500).json({ error: 'Error al eliminar camión' });
+  }
+};
+
+const getTiposCamion = async (req, res) => {
+  try {
+    const tiposCamion = await camionModel.getTiposCamion();
+    res.json(tiposCamion);
+  } catch (error) {
+    console.error('Error al obtener tipos de camión:', error);
+    res.status(500).json({ error: 'Error al obtener tipos de camión' });
+  }
+};
+
+module.exports = {
+  getCamiones,
+  getCamionById,
+  createCamion,
+  updateCamion,
+  deleteCamion,
+  getTiposCamion,
+};
