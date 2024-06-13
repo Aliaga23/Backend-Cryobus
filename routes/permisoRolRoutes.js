@@ -1,4 +1,4 @@
-// routes/permisoRolRoutes.js
+/ routes/permisoRolRoutes.js
 const express = require('express');
 const { getPermisosByRolId, createPermisoRol, deletePermisoRol } = require('../controllers/permisoRolController');
 
