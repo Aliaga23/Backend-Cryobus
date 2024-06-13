@@ -24,6 +24,8 @@ const camionRoutes = require('./routes/camionRoutes');
 const tipoCamionRoutes = require('./routes/tipoCamionRoutes');
 const departamentoRoutes = require('./routes/departamentoRoutes');
 const localidadRoutes = require('./routes/localidadRoutes');
+const ubicacionRoutes = require('./routes/ubicacionRoutes');
+const notaTrasladoRoutes = require('./routes/notaTrasladoRoutes');
 
 const bitacoraRoutes = require('./routes/bitacoraRoutes');
 
@@ -66,6 +68,8 @@ app.use('/api/camiones', camionRoutes);
 app.use('/api/departamentos', departamentoRoutes);
 app.use('/api/bitacora', bitacoraRoutes);
 app.use('/api/localidades', localidadRoutes);
+app.use('/api/ubicaciones', ubicacionRoutes);
+app.use('/api/notasTraslado', notaTrasladoRoutes);
 
 // Ruta de prueba
 app.get('/ping', async (req, res) => {

@@ -1,12 +1,12 @@
-// routes/estadoEntregaRoutes.js
 const express = require('express');
-const estadoEntregaController = require('../controllers/estadoEntregaController');
+const { getEstadosEntrega, getEstadoEntregaById, createEstadoEntrega, updateEstadoEntrega, deleteEstadoEntrega } = require('../controllers/estadoEntregaController');
+
 const router = express.Router();
 
-router.get('/', estadoEntregaController.getEstadosEntrega);
-router.get('/:id', estadoEntregaController.getEstadoEntrega);
-router.post('/', estadoEntregaController.createEstadoEntrega);
-router.put('/:id', estadoEntregaController.updateEstadoEntrega);
-router.delete('/:id', estadoEntregaController.deleteEstadoEntrega);
+router.get('/', getEstadosEntrega);
+router.get('/:id', getEstadoEntregaById);
+router.post('/', createEstadoEntrega);
+router.put('/:id', updateEstadoEntrega);
+router.delete('/:id', deleteEstadoEntrega);
 
 module.exports = router;
