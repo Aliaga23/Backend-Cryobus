@@ -27,6 +27,7 @@ const localidadRoutes = require('./routes/localidadRoutes');
 const ubicacionRoutes = require('./routes/ubicacionRoutes');
 const notaTrasladoRoutes = require('./routes/notaTrasladoRoutes');
 const planRutaRoutes = require('./routes/planRutaRoutes');
+const tipoPaqueteRoutes = require('./routes/tipoPaqueteRoutes');
 
 const bitacoraRoutes = require('./routes/bitacoraRoutes');
 
@@ -72,6 +73,7 @@ app.use('/api/localidades', localidadRoutes);
 app.use('/api/ubicaciones', ubicacionRoutes);
 app.use('/api/notasTraslado', notaTrasladoRoutes);
 app.use('/api/planRuta', planRutaRoutes);
+app.use('/api/tipoPaquete', tipoPaqueteRoutes);
 
 // Ruta de prueba
 app.get('/ping', async (req, res) => {
