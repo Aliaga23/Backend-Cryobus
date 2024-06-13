@@ -15,7 +15,7 @@ const getPermisosByRolId = async (req, res) => {
 const createPermisoRol = async (req, res) => {
   const { idRol } = req.params;
   const newPermisoRol = req.body;
-  
+
   if (req.user.IDROL !== 1) {
     return res.status(403).json({ message: 'Usuario no autorizado' });
   }
@@ -31,7 +31,7 @@ const createPermisoRol = async (req, res) => {
 
 const deletePermisoRol = async (req, res) => {
   const { idRol, nro } = req.params;
-  
+
   if (req.user.IDROL !== 1) {
     return res.status(403).json({ message: 'Usuario no autorizado' });
   }

@@ -23,6 +23,7 @@ const authenticate = async (req, res, next) => {
 
     next();
   } catch (error) {
+    console.error('Error en authenticate:', error);
     res.status(500).json({ message: 'Error en la autenticación', error });
   }
 };
