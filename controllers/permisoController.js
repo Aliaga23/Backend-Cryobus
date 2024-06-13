@@ -59,6 +59,15 @@ const deletePermiso = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+const getPermisosByUserId = async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const permisos = await PermisoModel.getPermisosByUserId(userId);
+    res.json(permisos);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
 module.exports = {
   getPermisos,
@@ -66,4 +75,5 @@ module.exports = {
   createPermiso,
   updatePermiso,
   deletePermiso,
+  getPermisosByUserId
 };
