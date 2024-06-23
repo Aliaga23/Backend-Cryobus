@@ -1,9 +1,14 @@
 // models/permisoRolModel.js
 const { pool } = require('../db');
-
 const getPermisosByRolId = async (idRol) => {
   try {
-    const [rows] = await pool.query('SELECT * FROM DETALLEROLPERMISO WHERE IDROL = ?', [idRol]);
+    const query = `
+      SELECT DRP.IDROL, DRP.NRO, DRP.IDPERMISO, P.NOMBRE AS PERMISONOMBRE
+      FROM DETALLEROLPERMISO DRP
+      JOIN PERMISO P ON DRP.IDPERMISO = P.ID
+      WHERE DRP.IDROL = ?
+    `;
+    const [rows] = await pool.query(query, [idRol]);
     return rows;
   } catch (error) {
     console.error('Error en getPermisosByRolId:', error);

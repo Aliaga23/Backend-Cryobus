@@ -12,6 +12,7 @@ const getPermisosByRolId = async (req, res) => {
   }
 };
 
+
 const createPermisoRol = async (req, res) => {
   const { idRol } = req.params;
   const newPermisoRol = req.body;
