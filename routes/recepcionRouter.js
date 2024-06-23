@@ -11,9 +11,9 @@ const {
 const router = express.Router();
 
 router.get('/', getAllRecepciones);
-router.get('/:id', getRecepcionById);
+router.get('/:nro', getRecepcionById);
 router.post('/', createRecepcion);
-router.put('/:id', updateRecepcion);
-router.delete('/:id', deleteRecepcion);
+router.put('/:nro', updateRecepcion);
+router.delete('/:nro', deleteRecepcion);
 
 module.exports = router;

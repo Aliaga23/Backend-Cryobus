@@ -21,7 +21,7 @@ const loginUser = async (req, res) => {
     const token = jwt.sign(
       { userId: user.ID, role: user.IDROL },
       process.env.JWT_SECRET,
-      { expiresIn: '12h' } // Cambia este valor a 12 horas o al tiempo que prefieras
+      { expiresIn: '12d' } // Cambia este valor a 12 horas o al tiempo que prefieras
     );
 
     // Enviar respuesta de éxito antes de ejecutar la lógica adicional
