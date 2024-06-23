@@ -2,7 +2,21 @@ const { pool } = require('../db');
 
 const getAllDetalles = async () => {
   try {
-    const [rows] = await pool.query('SELECT * FROM DETALLECONDUCTOR');
+    const query = `
+      SELECT 
+        DC.NRO, 
+        DC.CODIGOCONDUCTOR, 
+        C.APELLIDOS, 
+        C.NOMBRES, 
+        DC.IDROLCONDUCTOR, 
+        RC.ROL, 
+        DC.NRONOTATRASLADO 
+      FROM 
+        DETALLECONDUCTOR DC
+        JOIN CONDUCTOR C ON DC.CODIGOCONDUCTOR = C.CODIGO
+        JOIN ROLCONDUCTOR RC ON DC.IDROLCONDUCTOR = RC.ID
+    `;
+    const [rows] = await pool.query(query);
     return rows;
   } catch (error) {
     throw new Error(error.message);
