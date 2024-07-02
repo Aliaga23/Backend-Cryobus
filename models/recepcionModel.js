@@ -8,7 +8,7 @@ const getRecepciones = async () => {
 const createRecepcion = async (recepcion) => {
   const { codigoClienteEnvia, codigoClienteRecibe, idTipoEnvio, idPlanRuta, costoPrevisto, usuarioAtendiendo, estadoEntrega, fechaRecepcion, horaRecepcion, codigoPaquete } = recepcion;
   const [result] = await pool.query(
-    'INSERT INTO NOTAENTREGA (FECHARECEPCION, HORARECEPCION, PRECIOESTIMADO, CODIGOCLIENTEENVIA, CODIGOCLIENTERECIBE, IDTIPOENVIO, IDESTADOENTREGA, IDUSUARIORECIBE, CODIGOPAQUETE, IDPLANRUTA) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+    'INSERT INTO NOTAENTREGA (FECHARECEPCION, HORARECEPCION, PRECIOESTIMADO, CODIGOCLIENTEENVIA, CODIGOCLIENTERECIBE, IDTIPOENVIO, IDESTADOENTREGA, IDUSUARIORECIBE, CODIGOPAQUETE, IDPLANDERUTA) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
     [fechaRecepcion, horaRecepcion, costoPrevisto, codigoClienteEnvia, codigoClienteRecibe, idTipoEnvio, estadoEntrega, usuarioAtendiendo, codigoPaquete, idPlanRuta]
   );
   return result;
