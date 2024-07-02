@@ -26,22 +26,25 @@ const deletePaquete = async (codigo) => {
   return result[0];
 };
 
-const getTiposByPaquete = async (codigoPaquete) => {
-  const [rows] = await pool.query(`
-    SELECT TP.ID, TP.NOMBRE
-    FROM TIPOPAQUETE TP
-    JOIN DETALLETIPOPAQUETE DTP ON TP.ID = DTP.IDTIPOPAQUETE
-    WHERE DTP.CODIGOPAQUETE = ?
-  `, [codigoPaquete]);
-  return rows;
-};
-
 const addTipoPaqueteToPaquete = async (codigoPaquete, idTipoPaquete) => {
-  const result = await pool.query(
-    'INSERT INTO DETALLETIPOPAQUETE (CODIGOPAQUETE, NRO, IDTIPOPAQUETE) VALUES (?, (SELECT COALESCE(MAX(NRO), 0) + 1 FROM DETALLETIPOPAQUETE WHERE CODIGOPAQUETE = ?), ?)',
-    [codigoPaquete, codigoPaquete, idTipoPaquete]
-  );
-  return result[0];
+  const connection = await pool.getConnection();
+  try {
+    await connection.beginTransaction();
+    const [[{ maxNro }]] = await connection.query(
+      'SELECT COALESCE(MAX(NRO), 0) + 1 AS maxNro FROM DETALLETIPOPAQUETE WHERE CODIGOPAQUETE = ?',
+      [codigoPaquete]
+    );
+    await connection.query(
+      'INSERT INTO DETALLETIPOPAQUETE (CODIGOPAQUETE, NRO, IDTIPOPAQUETE) VALUES (?, ?, ?)',
+      [codigoPaquete, maxNro, idTipoPaquete]
+    );
+    await connection.commit();
+  } catch (error) {
+    await connection.rollback();
+    throw error;
+  } finally {
+    connection.release();
+  }
 };
 
 const removeTipoPaqueteFromPaquete = async (codigoPaquete, idTipoPaquete) => {
@@ -58,7 +61,6 @@ module.exports = {
   createPaquete,
   updatePaquete,
   deletePaquete,
-  getTiposByPaquete,
   addTipoPaqueteToPaquete,
   removeTipoPaqueteFromPaquete,
 };

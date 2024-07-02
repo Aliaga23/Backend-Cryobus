@@ -10,6 +10,16 @@ const getPaquetes = async (req, res) => {
   }
 };
 
+const getPaqueteById = async (req, res) => {
+  try {
+    const paquete = await paqueteModel.getPaqueteById(req.params.codigo);
+    res.json(paquete);
+  } catch (error) {
+    console.error('Error al obtener el paquete:', error);
+    res.status(500).json({ error: 'Error al obtener el paquete' });
+  }
+};
+
 const createPaquete = async (req, res) => {
   try {
     const newPaquete = await paqueteModel.createPaquete(req.body);
@@ -40,15 +50,6 @@ const deletePaquete = async (req, res) => {
   }
 };
 
-const getTiposByPaquete = async (req, res) => {
-  try {
-    const tipos = await paqueteModel.getTiposByPaquete(req.params.codigoPaquete);
-    res.json(tipos);
-  } catch (error) {
-    console.error('Error al obtener tipos de paquete:', error);
-    res.status(500).json({ error: 'Error al obtener tipos de paquete' });
-  }
-};
 const addTipoPaqueteToPaquete = async (req, res) => {
   try {
     const { codigo } = req.params;
@@ -75,10 +76,10 @@ const removeTipoPaqueteFromPaquete = async (req, res) => {
 
 module.exports = {
   getPaquetes,
+  getPaqueteById,
   createPaquete,
   updatePaquete,
   deletePaquete,
-  getTiposByPaquete,
   addTipoPaqueteToPaquete,
   removeTipoPaqueteFromPaquete,
 };
