@@ -33,7 +33,8 @@ const direccionRoutes = require('./routes/direccionRouter');
 const conductorRoutes = require('./routes/conductorRoutes');
 const detalleConductorRoutes = require('./routes/detalleConductorRoutes');
 const { setIO } = require('./controllers/socketController'); // Nuevo controlador para configurar io
-
+const reembolsoRoutes = require('./routes/reembolsoRoutes');
+const celularClienteRoutes =require('./routes/celularClienteRoutes');
 const app = express();
 const server = http.createServer(app);
 
@@ -78,6 +79,10 @@ app.use('/api/logout', logoutRoutes);
 app.use('/api/direcciones', direccionRoutes); // Ruta nueva
 app.use('/api/conductores', conductorRoutes);
 app.use('/api/detalleconductor', detalleConductorRoutes);
+
+app.use('/api/reembolsos', reembolsoRoutes);
+
+app.use('/api/celulares', celularClienteRoutes);
 // Ruta de prueba
 app.get('/ping', async (req, res) => {
   try {
