@@ -1,25 +1,23 @@
+// controllers/itemController.js
 const itemModel = require('../models/itemModel');
 
 const getItems = async (req, res) => {
   try {
-    const items = await itemModel.getAllItems();
+    const items = await itemModel.getItems();
     res.json(items);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Error al obtener items:', error);
+    res.status(500).json({ error: 'Error al obtener items' });
   }
 };
 
-const getItem = async (req, res) => {
-  const { id } = req.params;
+const getItemById = async (req, res) => {
   try {
-    const item = await itemModel.getItemById(id);
-    if (item) {
-      res.json(item);
-    } else {
-      res.status(404).json({ message: 'Item not found' });
-    }
+    const item = await itemModel.getItemById(req.params.codigopaquete);
+    res.json(item);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Error al obtener item:', error);
+    res.status(500).json({ error: 'Error al obtener item' });
   }
 };
 
@@ -28,34 +26,35 @@ const createItem = async (req, res) => {
     const newItem = await itemModel.createItem(req.body);
     res.status(201).json(newItem);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Error al crear item:', error);
+    res.status(500).json({ error: 'Error al crear item' });
   }
 };
 
 const updateItem = async (req, res) => {
-  const { id } = req.params;
   try {
-    await itemModel.updateItem(id, req.body);
-    res.json({ message: 'Item updated successfully' });
+    const updatedItem = await itemModel.updateItem(req.params.codigopaquete, req.params.nro, req.body);
+    res.json(updatedItem);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Error al actualizar item:', error);
+    res.status(500).json({ error: 'Error al actualizar item' });
   }
 };
 
 const deleteItem = async (req, res) => {
-  const { id } = req.params;
   try {
-    await itemModel.deleteItem(id);
-    res.json({ message: 'Item deleted successfully' });
+    await itemModel.deleteItem(req.params.codigopaquete, req.params.nro);
+    res.status(204).json();
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Error al eliminar item:', error);
+    res.status(500).json({ error: 'Error al eliminar item' });
   }
 };
 
 module.exports = {
   getItems,
-  getItem,
+  getItemById,
   createItem,
   updateItem,
-  deleteItem
+  deleteItem,
 };
