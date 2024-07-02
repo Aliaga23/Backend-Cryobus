@@ -1,4 +1,3 @@
-// controllers/paqueteController.js
 const paqueteModel = require('../models/paqueteModel');
 
 const getPaquetes = async (req, res) => {
@@ -51,10 +50,21 @@ const deletePaquete = async (req, res) => {
   }
 };
 
+const getTiposPaquete = async (req, res) => {
+  try {
+    const tiposPaquete = await paqueteModel.getTiposPaquete();
+    res.json(tiposPaquete);
+  } catch (error) {
+    console.error('Error al obtener tipos de paquete:', error);
+    res.status(500).json({ error: 'Error al obtener tipos de paquete' });
+  }
+};
+
 module.exports = {
   getPaquetes,
   getPaqueteById,
   createPaquete,
   updatePaquete,
   deletePaquete,
+  getTiposPaquete,
 };
