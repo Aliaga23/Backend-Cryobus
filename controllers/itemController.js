@@ -9,28 +9,44 @@ const getItems = async (req, res) => {
   }
 };
 
+const getItem = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const item = await itemModel.getItemById(id);
+    if (item) {
+      res.json(item);
+    } else {
+      res.status(404).json({ message: 'Item not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 const createItem = async (req, res) => {
   try {
-    await itemModel.createItem(req.body);
-    res.status(201).json({ message: 'Item creado exitosamente' });
+    const newItem = await itemModel.createItem(req.body);
+    res.status(201).json(newItem);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
 const updateItem = async (req, res) => {
+  const { id } = req.params;
   try {
-    await itemModel.updateItem(req.params.id, req.body);
-    res.status(200).json({ message: 'Item actualizado exitosamente' });
+    await itemModel.updateItem(id, req.body);
+    res.json({ message: 'Item updated successfully' });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
 const deleteItem = async (req, res) => {
+  const { id } = req.params;
   try {
-    await itemModel.deleteItem(req.params.id);
-    res.status(200).json({ message: 'Item eliminado exitosamente' });
+    await itemModel.deleteItem(id);
+    res.json({ message: 'Item deleted successfully' });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -38,6 +54,7 @@ const deleteItem = async (req, res) => {
 
 module.exports = {
   getItems,
+  getItem,
   createItem,
   updateItem,
   deleteItem

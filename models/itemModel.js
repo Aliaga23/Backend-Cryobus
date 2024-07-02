@@ -10,6 +10,16 @@ const getAllItems = async () => {
   }
 };
 
+const getItemById = async (id) => {
+  try {
+    const query = 'SELECT * FROM ITEM WHERE ID = ?';
+    const [rows] = await pool.query(query, [id]);
+    return rows[0];
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
 const createItem = async (item) => {
   const { codigopaquete, descripcion, pesoindividual } = item;
   try {
@@ -48,6 +58,7 @@ const deleteItem = async (id) => {
 
 module.exports = {
   getAllItems,
+  getItemById,
   createItem,
   updateItem,
   deleteItem
