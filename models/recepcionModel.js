@@ -5,16 +5,32 @@ const getRecepciones = async () => {
   return rows;
 };
 
+const getRecepcionByNRO = async (nro) => {
+  const [rows] = await pool.query('SELECT * FROM NOTAENTREGA WHERE NRO = ?', [nro]);
+  return rows[0];
+};
+
 const createRecepcion = async (recepcion) => {
-  const { codigoClienteEnvia, codigoClienteRecibe, idTipoEnvio, idPlanRuta, costoPrevisto, usuarioAtendiendo, estadoEntrega, fechaRecepcion, horaRecepcion, codigoPaquete } = recepcion;
+  const { FECHARECEPCION, HORARECEPCION, PRECIOESTIMADO, CODIGOCLIENTEENVIA, CODIGOCLIENTERECIBE, IDTIPOENVIO, IDESTADOENTREGA, IDUSUARIOENVIA, CODIGOPAQUETE, IDPLANDERUTA } = recepcion;
   const [result] = await pool.query(
-    'INSERT INTO NOTAENTREGA (FECHARECEPCION, HORARECEPCION, PRECIOESTIMADO, CODIGOCLIENTEENVIA, CODIGOCLIENTERECIBE, IDTIPOENVIO, IDESTADOENTREGA, IDUSUARIORECIBE, CODIGOPAQUETE, IDPLANDERUTA) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-    [fechaRecepcion, horaRecepcion, costoPrevisto, codigoClienteEnvia, codigoClienteRecibe, idTipoEnvio, estadoEntrega, usuarioAtendiendo, codigoPaquete, idPlanRuta]
+    'INSERT INTO NOTAENTREGA (FECHARECEPCION, HORARECEPCION, PRECIOESTIMADO, CODIGOCLIENTEENVIA, CODIGOCLIENTERECIBE, IDTIPOENVIO, IDESTADOENTREGA, IDUSUARIOENVIA, CODIGOPAQUETE, IDPLANDERUTA) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+    [FECHARECEPCION, HORARECEPCION, PRECIOESTIMADO, CODIGOCLIENTEENVIA, CODIGOCLIENTERECIBE, IDTIPOENVIO, IDESTADOENTREGA, IDUSUARIOENVIA, CODIGOPAQUETE, IDPLANDERUTA]
+  );
+  return result;
+};
+
+const updateRecepcion = async (nro, recepcion) => {
+  const { FECHARECEPCION, HORARECEPCION, PRECIOESTIMADO, CODIGOCLIENTEENVIA, CODIGOCLIENTERECIBE, IDTIPOENVIO, IDESTADOENTREGA, IDUSUARIOENVIA, CODIGOPAQUETE, IDPLANDERUTA } = recepcion;
+  const [result] = await pool.query(
+    'UPDATE NOTAENTREGA SET FECHARECEPCION = ?, HORARECEPCION = ?, PRECIOESTIMADO = ?, CODIGOCLIENTEENVIA = ?, CODIGOCLIENTERECIBE = ?, IDTIPOENVIO = ?, IDESTADOENTREGA = ?, IDUSUARIOENVIA = ?, CODIGOPAQUETE = ?, IDPLANDERUTA = ? WHERE NRO = ?',
+    [FECHARECEPCION, HORARECEPCION, PRECIOESTIMADO, CODIGOCLIENTEENVIA, CODIGOCLIENTERECIBE, IDTIPOENVIO, IDESTADOENTREGA, IDUSUARIOENVIA, CODIGOPAQUETE, IDPLANDERUTA, nro]
   );
   return result;
 };
 
 module.exports = {
   getRecepciones,
-  createRecepcion
+  getRecepcionByNRO,
+  createRecepcion,
+  updateRecepcion
 };

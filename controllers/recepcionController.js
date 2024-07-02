@@ -10,17 +10,42 @@ const getRecepciones = async (req, res) => {
   }
 };
 
-const createRecepcion = async (req, res) => {
+const getRecepcionByNRO = async (req, res) => {
   try {
-    const newRecepcion = await recepcionModel.createRecepcion(req.body);
-    res.status(201).json(newRecepcion);
+    const { nro } = req.params;
+    const recepcion = await recepcionModel.getRecepcionByNRO(nro);
+    if (!recepcion) {
+      return res.status(404).json({ error: 'Recepción no encontrada' });
+    }
+    res.json(recepcion);
   } catch (error) {
-    console.error('Error al crear recepción:', error);
-    res.status(500).json({ error: 'Error al crear recepción' });
+    console.error('Error al obtener la recepción:', error);
+    res.status(500).json({ error: 'Error al obtener la recepción' });
+  }
+};
+
+const createOrUpdateRecepcion = async (req, res) => {
+  try {
+    const { NRO } = req.body;
+    const fechaRecepcion = new Date().toISOString().split('T')[0];
+    const horaRecepcion = new Date().toTimeString().split(' ')[0];
+    const newRecepcion = { ...req.body, FECHARECEPCION: fechaRecepcion, HORARECEPCION: horaRecepcion };
+
+    if (NRO) {
+      await recepcionModel.updateRecepcion(NRO, newRecepcion);
+      res.status(200).json({ message: 'Recepción actualizada correctamente' });
+    } else {
+      await recepcionModel.createRecepcion(newRecepcion);
+      res.status(201).json({ message: 'Recepción creada correctamente' });
+    }
+  } catch (error) {
+    console.error('Error al crear o actualizar la recepción:', error);
+    res.status(500).json({ error: 'Error al crear o actualizar la recepción' });
   }
 };
 
 module.exports = {
   getRecepciones,
-  createRecepcion
+  getRecepcionByNRO,
+  createOrUpdateRecepcion
 };
