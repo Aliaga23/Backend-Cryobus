@@ -8,7 +8,8 @@ router.post('/', paqueteController.createPaquete);
 router.put('/:codigo', paqueteController.updatePaquete);
 router.delete('/:codigo', paqueteController.deletePaquete);
 
+router.get('/:codigo/tipos', paqueteController.getTiposByPaquete);
 router.post('/:codigo/tipos', paqueteController.addTipoPaqueteToPaquete);
-router.delete('/:codigo/tipos', paqueteController.removeTipoPaqueteFromPaquete);
+router.delete('/:codigo/tipos', paqueteController.deleteTipoPaqueteFromPaquete);
 
 module.exports = router;
