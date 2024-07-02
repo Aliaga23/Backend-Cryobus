@@ -1,12 +1,10 @@
-// routes/itemRoutes.js
 const express = require('express');
 const router = express.Router();
 const itemController = require('../controllers/itemController');
 
-router.get('/', itemController.getItems);
-router.get('/:codigopaquete', itemController.getItemById);
-router.post('/', itemController.createItem);
-router.put('/:codigopaquete/:nro', itemController.updateItem);
-router.delete('/:codigopaquete/:nro', itemController.deleteItem);
+router.get('/items', itemController.getItems);
+router.post('/items', itemController.createItem);
+router.put('/items/:id', itemController.updateItem);
+router.delete('/items/:id', itemController.deleteItem);
 
 module.exports = router;

@@ -1,37 +1,54 @@
-// models/itemModel.js
 const { pool } = require('../db');
 
-const getItems = async () => {
-  const [rows] = await pool.query('SELECT * FROM ITEM');
-  return rows;
-};
-
-const getItemById = async (codigoPaquete) => {
-  const [rows] = await pool.query('SELECT * FROM ITEM WHERE CODIGOPAQUETE = ? ', [codigoPaquete]);
-  return rows;
+const getAllItems = async () => {
+  try {
+    const query = 'SELECT * FROM ITEM';
+    const [rows] = await pool.query(query);
+    return rows;
+  } catch (error) {
+    throw new Error(error.message);
+  }
 };
 
 const createItem = async (item) => {
-  const { codigopaquete, nro, descripcion, pesoindividual } = item;
-  const result = await pool.query('INSERT INTO ITEM (CODIGOPAQUETE, NRO, DESCRIPCION, PESOINDIVIDUAL) VALUES (?, ?, ?, ?)', [codigopaquete, nro, descripcion, pesoindividual]);
-  return result[0];
+  const { codigopaquete, descripcion, pesoindividual } = item;
+  try {
+    const query = `
+      INSERT INTO ITEM (CODIGOPAQUETE, DESCRIPCION, PESOINDIVIDUAL)
+      VALUES (?, ?, ?)
+    `;
+    await pool.query(query, [codigopaquete, descripcion, pesoindividual]);
+  } catch (error) {
+    throw new Error(error.message);
+  }
 };
 
-const updateItem = async (codigoPaquete, nro, item) => {
-  const { descripcion, pesoindividual } = item;
-  const result = await pool.query('UPDATE ITEM SET DESCRIPCION = ?, PESOINDIVIDUAL = ? WHERE CODIGOPAQUETE = ? AND NRO = ?', [descripcion, pesoindividual, codigoPaquete, nro]);
-  return result[0];
+const updateItem = async (id, item) => {
+  const { codigopaquete, descripcion, pesoindividual } = item;
+  try {
+    const query = `
+      UPDATE ITEM
+      SET CODIGOPAQUETE = ?, DESCRIPCION = ?, PESOINDIVIDUAL = ?
+      WHERE ID = ?
+    `;
+    await pool.query(query, [codigopaquete, descripcion, pesoindividual, id]);
+  } catch (error) {
+    throw new Error(error.message);
+  }
 };
 
-const deleteItem = async (codigoPaquete, nro) => {
-  const result = await pool.query('DELETE FROM ITEM WHERE CODIGOPAQUETE = ? AND NRO = ?', [codigoPaquete, nro]);
-  return result[0];
+const deleteItem = async (id) => {
+  try {
+    const query = 'DELETE FROM ITEM WHERE ID = ?';
+    await pool.query(query, [id]);
+  } catch (error) {
+    throw new Error(error.message);
+  }
 };
 
 module.exports = {
-  getItems,
-  getItemById,
+  getAllItems,
   createItem,
   updateItem,
-  deleteItem,
+  deleteItem
 };

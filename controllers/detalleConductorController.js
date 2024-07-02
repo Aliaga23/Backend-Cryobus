@@ -1,51 +1,47 @@
-const DetalleConductorModel = require('../models/detalleConductorModel');
+const detalleConductorModel = require('../models/detalleConductorModel');
 
-const getDetalles = async (req, res) => {
+const getAllDetalles = async (req, res) => {
   try {
-    const detalles = await DetalleConductorModel.getAllDetalles();
+    const detalles = await detalleConductorModel.getAllDetalles();
     res.json(detalles);
   } catch (error) {
-    console.error('Error al obtener los detalles del conductor:', error);
-    res.status(500).json({ error: 'Error al obtener los detalles del conductor' });
+    res.status(500).json({ error: error.message });
   }
 };
 
 const createDetalle = async (req, res) => {
-  const newDetalle = req.body;
+  const { codigoConductor, idRolConductor, nroNotaTraslado } = req.body;
   try {
-    await DetalleConductorModel.createDetalle(newDetalle);
-    res.status(201).json({ message: 'Detalle creado exitosamente' });
+    const insertId = await detalleConductorModel.createDetalle({ codigoConductor, idRolConductor, nroNotaTraslado });
+    res.status(201).json({ message: 'Detalle del conductor creado', nro: insertId });
   } catch (error) {
-    console.error('Error al crear el detalle del conductor:', error);
-    res.status(500).json({ error: 'Error al crear el detalle del conductor' });
+    res.status(500).json({ error: error.message });
   }
 };
 
 const updateDetalle = async (req, res) => {
+  const { codigoConductor, idRolConductor, nroNotaTraslado } = req.body;
   const { nro } = req.params;
-  const updatedDetalle = req.body;
   try {
-    await DetalleConductorModel.updateDetalle(nro, updatedDetalle);
-    res.status(200).json({ message: 'Detalle actualizado exitosamente' });
+    await detalleConductorModel.updateDetalle(nro, { codigoConductor, idRolConductor, nroNotaTraslado });
+    res.json({ message: 'Detalle del conductor actualizado' });
   } catch (error) {
-    console.error('Error al actualizar el detalle del conductor:', error);
-    res.status(500).json({ error: 'Error al actualizar el detalle del conductor' });
+    res.status(500).json({ error: error.message });
   }
 };
 
 const deleteDetalle = async (req, res) => {
   const { nro } = req.params;
   try {
-    await DetalleConductorModel.deleteDetalle(nro);
-    res.status(200).json({ message: 'Detalle eliminado exitosamente' });
+    await detalleConductorModel.deleteDetalle(nro);
+    res.json({ message: 'Detalle del conductor eliminado' });
   } catch (error) {
-    console.error('Error al eliminar el detalle del conductor:', error);
-    res.status(500).json({ error: 'Error al eliminar el detalle del conductor' });
+    res.status(500).json({ error: error.message });
   }
 };
 
 module.exports = {
-  getDetalles,
+  getAllDetalles,
   createDetalle,
   updateDetalle,
   deleteDetalle
