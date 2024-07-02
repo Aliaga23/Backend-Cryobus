@@ -49,21 +49,24 @@ const getTiposByPaquete = async (req, res) => {
     res.status(500).json({ error: 'Error al obtener tipos de paquete' });
   }
 };
-
-const addTipoToPaquete = async (req, res) => {
+const addTipoPaqueteToPaquete = async (req, res) => {
   try {
-    const result = await paqueteModel.addTipoToPaquete(req.params.codigoPaquete, req.body.idTipoPaquete);
-    res.status(201).json(result);
+    const { codigo } = req.params;
+    const { idTipoPaquete } = req.body;
+    await paqueteModel.addTipoPaqueteToPaquete(codigo, idTipoPaquete);
+    res.status(201).json({ message: 'Tipo de paquete añadido correctamente' });
   } catch (error) {
     console.error('Error al añadir tipo de paquete:', error);
     res.status(500).json({ error: 'Error al añadir tipo de paquete' });
   }
 };
 
-const removeTipoFromPaquete = async (req, res) => {
+const removeTipoPaqueteFromPaquete = async (req, res) => {
   try {
-    await paqueteModel.removeTipoFromPaquete(req.params.codigoPaquete, req.body.idTipoPaquete);
-    res.status(204).json();
+    const { codigo } = req.params;
+    const { idTipoPaquete } = req.body;
+    await paqueteModel.removeTipoPaqueteFromPaquete(codigo, idTipoPaquete);
+    res.status(200).json({ message: 'Tipo de paquete eliminado correctamente' });
   } catch (error) {
     console.error('Error al eliminar tipo de paquete:', error);
     res.status(500).json({ error: 'Error al eliminar tipo de paquete' });
@@ -76,6 +79,6 @@ module.exports = {
   updatePaquete,
   deletePaquete,
   getTiposByPaquete,
-  addTipoToPaquete,
-  removeTipoFromPaquete,
+  addTipoPaqueteToPaquete,
+  removeTipoPaqueteFromPaquete,
 };

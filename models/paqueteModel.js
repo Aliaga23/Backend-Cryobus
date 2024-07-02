@@ -36,13 +36,19 @@ const getTiposByPaquete = async (codigoPaquete) => {
   return rows;
 };
 
-const addTipoToPaquete = async (codigoPaquete, idTipoPaquete) => {
-  const result = await pool.query('INSERT INTO DETALLETIPOPAQUETE (CODIGOPAQUETE, IDTIPOPAQUETE) VALUES (?, ?)', [codigoPaquete, idTipoPaquete]);
+const addTipoPaqueteToPaquete = async (codigoPaquete, idTipoPaquete) => {
+  const result = await pool.query(
+    'INSERT INTO DETALLETIPOPAQUETE (CODIGOPAQUETE, NRO, IDTIPOPAQUETE) VALUES (?, (SELECT COALESCE(MAX(NRO), 0) + 1 FROM DETALLETIPOPAQUETE WHERE CODIGOPAQUETE = ?), ?)',
+    [codigoPaquete, codigoPaquete, idTipoPaquete]
+  );
   return result[0];
 };
 
-const removeTipoFromPaquete = async (codigoPaquete, idTipoPaquete) => {
-  const result = await pool.query('DELETE FROM DETALLETIPOPAQUETE WHERE CODIGOPAQUETE = ? AND IDTIPOPAQUETE = ?', [codigoPaquete, idTipoPaquete]);
+const removeTipoPaqueteFromPaquete = async (codigoPaquete, idTipoPaquete) => {
+  const result = await pool.query(
+    'DELETE FROM DETALLETIPOPAQUETE WHERE CODIGOPAQUETE = ? AND IDTIPOPAQUETE = ?',
+    [codigoPaquete, idTipoPaquete]
+  );
   return result[0];
 };
 
@@ -53,6 +59,6 @@ module.exports = {
   updatePaquete,
   deletePaquete,
   getTiposByPaquete,
-  addTipoToPaquete,
-  removeTipoFromPaquete,
+  addTipoPaqueteToPaquete,
+  removeTipoPaqueteFromPaquete,
 };
