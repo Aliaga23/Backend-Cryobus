@@ -1,3 +1,4 @@
+// controllers/paqueteController.js
 const paqueteModel = require('../models/paqueteModel');
 
 const getPaquetes = async (req, res) => {
@@ -7,16 +8,6 @@ const getPaquetes = async (req, res) => {
   } catch (error) {
     console.error('Error al obtener paquetes:', error);
     res.status(500).json({ error: 'Error al obtener paquetes' });
-  }
-};
-
-const getPaqueteById = async (req, res) => {
-  try {
-    const paquete = await paqueteModel.getPaqueteById(req.params.codigo);
-    res.json(paquete);
-  } catch (error) {
-    console.error('Error al obtener paquete:', error);
-    res.status(500).json({ error: 'Error al obtener paquete' });
   }
 };
 
@@ -50,10 +41,10 @@ const deletePaquete = async (req, res) => {
   }
 };
 
-const getTiposByPaquete = async (req, res) => {
+const getTiposPaquete = async (req, res) => {
   try {
-    const tipos = await paqueteModel.getTiposByPaquete(req.params.codigo);
-    res.json(tipos);
+    const tiposPaquete = await paqueteModel.getTiposPaquete(req.params.codigoPaquete);
+    res.json(tiposPaquete);
   } catch (error) {
     console.error('Error al obtener tipos de paquete:', error);
     res.status(500).json({ error: 'Error al obtener tipos de paquete' });
@@ -62,17 +53,19 @@ const getTiposByPaquete = async (req, res) => {
 
 const addTipoPaqueteToPaquete = async (req, res) => {
   try {
-    await paqueteModel.addTipoPaqueteToPaquete(req.params.codigo, req.body.idTipoPaquete);
-    res.status(201).json();
+    const { idTipoPaquete } = req.body;
+    await paqueteModel.addTipoPaqueteToPaquete(req.params.codigoPaquete, idTipoPaquete);
+    res.status(201).json({ message: 'Tipo de paquete añadido' });
   } catch (error) {
     console.error('Error al añadir tipo de paquete:', error);
     res.status(500).json({ error: 'Error al añadir tipo de paquete' });
   }
 };
 
-const deleteTipoPaqueteFromPaquete = async (req, res) => {
+const removeTipoPaqueteFromPaquete = async (req, res) => {
   try {
-    await paqueteModel.deleteTipoPaqueteFromPaquete(req.params.codigo, req.body.idTipoPaquete);
+    const { idTipoPaquete } = req.body;
+    await paqueteModel.removeTipoPaqueteFromPaquete(req.params.codigoPaquete, idTipoPaquete);
     res.status(204).json();
   } catch (error) {
     console.error('Error al eliminar tipo de paquete:', error);
@@ -82,11 +75,10 @@ const deleteTipoPaqueteFromPaquete = async (req, res) => {
 
 module.exports = {
   getPaquetes,
-  getPaqueteById,
   createPaquete,
   updatePaquete,
   deletePaquete,
-  getTiposByPaquete,
+  getTiposPaquete,
   addTipoPaqueteToPaquete,
-  deleteTipoPaqueteFromPaquete,
+  removeTipoPaqueteFromPaquete,
 };

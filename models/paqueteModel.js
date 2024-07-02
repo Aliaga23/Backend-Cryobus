@@ -1,3 +1,4 @@
+// models/paqueteModel.js
 const { pool } = require('../db');
 
 const getPaquetes = async () => {
@@ -26,26 +27,29 @@ const deletePaquete = async (codigo) => {
   return result[0];
 };
 
-const getTiposByPaquete = async (codigo) => {
-  const [rows] = await pool.query(
-    'SELECT T.ID, T.NOMBRE FROM DETALLETIPOPAQUETE DT JOIN TIPOPAQUETE T ON DT.IDTIPOPAQUETE = T.ID WHERE DT.CODIGOPAQUETE = ?',
-    [codigo]
-  );
+const getTiposPaquete = async (codigoPaquete) => {
+  const [rows] = await pool.query(`
+    SELECT TP.ID, TP.NOMBRE
+    FROM TIPOPAQUETE TP
+    JOIN DETALLETIPOPAQUETE DP ON TP.ID = DP.IDTIPOPAQUETE
+    WHERE DP.CODIGOPAQUETE = ?
+  `, [codigoPaquete]);
   return rows;
 };
 
 const addTipoPaqueteToPaquete = async (codigoPaquete, idTipoPaquete) => {
-  await pool.query(
-    'INSERT INTO DETALLETIPOPAQUETE (CODIGOPAQUETE, NRO, IDTIPOPAQUETE) VALUES (?, (SELECT COALESCE(MAX(NRO), 0) + 1 FROM DETALLETIPOPAQUETE WHERE CODIGOPAQUETE = ?), ?)',
-    [codigoPaquete, codigoPaquete, idTipoPaquete]
-  );
+  const [rows] = await pool.query(`
+    INSERT INTO DETALLETIPOPAQUETE (CODIGOPAQUETE, NRO, IDTIPOPAQUETE)
+    SELECT ?, COALESCE(MAX(NRO), 0) + 1, ?
+    FROM DETALLETIPOPAQUETE
+    WHERE CODIGOPAQUETE = ?
+  `, [codigoPaquete, idTipoPaquete, codigoPaquete]);
+  return rows[0];
 };
 
-const deleteTipoPaqueteFromPaquete = async (codigoPaquete, idTipoPaquete) => {
-  await pool.query(
-    'DELETE FROM DETALLETIPOPAQUETE WHERE CODIGOPAQUETE = ? AND IDTIPOPAQUETE = ?',
-    [codigoPaquete, idTipoPaquete]
-  );
+const removeTipoPaqueteFromPaquete = async (codigoPaquete, idTipoPaquete) => {
+  const result = await pool.query('DELETE FROM DETALLETIPOPAQUETE WHERE CODIGOPAQUETE = ? AND IDTIPOPAQUETE = ?', [codigoPaquete, idTipoPaquete]);
+  return result[0];
 };
 
 module.exports = {
@@ -54,7 +58,7 @@ module.exports = {
   createPaquete,
   updatePaquete,
   deletePaquete,
-  getTiposByPaquete,
+  getTiposPaquete,
   addTipoPaqueteToPaquete,
-  deleteTipoPaqueteFromPaquete,
+  removeTipoPaqueteFromPaquete,
 };

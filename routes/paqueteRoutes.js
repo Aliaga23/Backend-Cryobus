@@ -1,15 +1,14 @@
+// routes/paqueteRoutes.js
 const express = require('express');
 const router = express.Router();
 const paqueteController = require('../controllers/paqueteController');
 
 router.get('/', paqueteController.getPaquetes);
-router.get('/:codigo', paqueteController.getPaqueteById);
 router.post('/', paqueteController.createPaquete);
 router.put('/:codigo', paqueteController.updatePaquete);
 router.delete('/:codigo', paqueteController.deletePaquete);
-
-router.get('/:codigo/tipos', paqueteController.getTiposByPaquete);
-router.post('/:codigo/tipos', paqueteController.addTipoPaqueteToPaquete);
-router.delete('/:codigo/tipos', paqueteController.deleteTipoPaqueteFromPaquete);
+router.get('/:codigoPaquete/tipos', paqueteController.getTiposPaquete);
+router.post('/:codigoPaquete/tipos', paqueteController.addTipoPaqueteToPaquete);
+router.delete('/:codigoPaquete/tipos', paqueteController.removeTipoPaqueteFromPaquete);
 
 module.exports = router;
