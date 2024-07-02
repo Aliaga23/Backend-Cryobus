@@ -10,20 +10,42 @@ const getEntregas = async (req, res) => {
   }
 };
 
-const createEntrega = async (req, res) => {
+const getEntregaByNRO = async (req, res) => {
   try {
+    const { nro } = req.params;
+    const entrega = await entregaModel.getEntregaByNRO(nro);
+    if (!entrega) {
+      return res.status(404).json({ error: 'Entrega no encontrada' });
+    }
+    res.json(entrega);
+  } catch (error) {
+    console.error('Error al obtener la entrega:', error);
+    res.status(500).json({ error: 'Error al obtener la entrega' });
+  }
+};
+
+const createOrUpdateEntrega = async (req, res) => {
+  try {
+    const { NRO } = req.body;
     const fechaEntrega = new Date().toISOString().split('T')[0];
     const horaEntrega = new Date().toTimeString().split(' ')[0];
-    const newEntrega = { ...req.body, fechaEntrega, horaEntrega };
-    const result = await entregaModel.createEntrega(newEntrega);
-    res.status(201).json(result);
+    const newEntrega = { ...req.body, FECHAENTREGA: fechaEntrega, HORAENTREGA: horaEntrega };
+
+    if (NRO) {
+      await entregaModel.updateEntrega(NRO, newEntrega);
+      res.status(200).json({ message: 'Entrega actualizada correctamente' });
+    } else {
+      await entregaModel.createEntrega(newEntrega);
+      res.status(201).json({ message: 'Entrega creada correctamente' });
+    }
   } catch (error) {
-    console.error('Error al crear entrega:', error);
-    res.status(500).json({ error: 'Error al crear entrega' });
+    console.error('Error al crear o actualizar la entrega:', error);
+    res.status(500).json({ error: 'Error al crear o actualizar la entrega' });
   }
 };
 
 module.exports = {
   getEntregas,
-  createEntrega
+  getEntregaByNRO,
+  createOrUpdateEntrega
 };
