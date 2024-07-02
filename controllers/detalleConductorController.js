@@ -1,42 +1,42 @@
-const detalleConductorModel = require('../models/detalleConductorModel');
+const { getAll, create, update, remove } = require('../models/detalleConductorModel');
 
 const getAllDetalles = async (req, res) => {
   try {
-    const detalles = await detalleConductorModel.getAllDetalles();
-    res.json(detalles);
+    const rows = await getAll();
+    res.json(rows);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).send(error.message);
   }
 };
 
 const createDetalle = async (req, res) => {
   const { codigoConductor, idRolConductor, nroNotaTraslado } = req.body;
   try {
-    const insertId = await detalleConductorModel.createDetalle({ codigoConductor, idRolConductor, nroNotaTraslado });
-    res.status(201).json({ message: 'Detalle del conductor creado', nro: insertId });
+    await create({ codigoConductor, idRolConductor, nroNotaTraslado });
+    res.status(201).send('Detalle created successfully');
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).send(error.message);
   }
 };
 
 const updateDetalle = async (req, res) => {
-  const { codigoConductor, idRolConductor, nroNotaTraslado } = req.body;
   const { nro } = req.params;
+  const { codigoConductor, idRolConductor, nroNotaTraslado } = req.body;
   try {
-    await detalleConductorModel.updateDetalle(nro, { codigoConductor, idRolConductor, nroNotaTraslado });
-    res.json({ message: 'Detalle del conductor actualizado' });
+    await update(nro, { codigoConductor, idRolConductor, nroNotaTraslado });
+    res.send('Detalle updated successfully');
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).send(error.message);
   }
 };
 
 const deleteDetalle = async (req, res) => {
   const { nro } = req.params;
   try {
-    await detalleConductorModel.deleteDetalle(nro);
-    res.json({ message: 'Detalle del conductor eliminado' });
+    await remove(nro);
+    res.send('Detalle deleted successfully');
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).send(error.message);
   }
 };
 
