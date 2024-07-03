@@ -1,4 +1,5 @@
 const recepcionModel = require('../models/recepcionModel');
+const moment = require('moment-timezone');
 
 const getRecepciones = async (req, res) => {
   try {
@@ -27,8 +28,8 @@ const getRecepcionByNRO = async (req, res) => {
 const createOrUpdateRecepcion = async (req, res) => {
   try {
     const { NRO } = req.body;
-    const fechaRecepcion = new Date().toISOString().split('T')[0];
-    const horaRecepcion = new Date().toTimeString().split(' ')[0];
+    const fechaRecepcion = moment().tz("America/La_Paz").format('YYYY-MM-DD');
+    const horaRecepcion = moment().tz("America/La_Paz").format('HH:mm:ss');
     const newRecepcion = { ...req.body, FECHARECEPCION: fechaRecepcion, HORARECEPCION: horaRecepcion };
 
     if (NRO) {
