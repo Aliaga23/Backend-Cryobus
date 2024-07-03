@@ -1,13 +1,13 @@
-// routes/tipoEnvioRoutes.js
 const express = require('express');
-const { getTipoEnvios, getTipoEnvioById, createTipoEnvio, updateTipoEnvio, deleteTipoEnvio } = require('../controllers/tipoEnvioController');
-
 const router = express.Router();
+const { getTipoEnvios, getTipoEnvioById, createTipoEnvio, updateTipoEnvio, deleteTipoEnvio } = require('../controllers/tipoEnvioController');
+const { authenticate, authorize } = require('../middleware/auth');
 
-router.get('/', getTipoEnvios);
-router.get('/:id', getTipoEnvioById);
-router.post('/', createTipoEnvio);
-router.put('/:id', updateTipoEnvio);
-router.delete('/:id', deleteTipoEnvio);
+router.get('/', authenticate,authorize([12]) , getTipoEnvios);
+router.get('/:id', authenticate,authorize([12]) , getTipoEnvioById);
+router.post('/', authenticate,authorize([29]) , createTipoEnvio);
+router.put('/:id', authenticate, authorize([29]) ,updateTipoEnvio);
+router.delete('/:id', authenticate,authorize([29]) , deleteTipoEnvio);
 
 module.exports = router;
+
