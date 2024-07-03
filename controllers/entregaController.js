@@ -1,4 +1,5 @@
 const entregaModel = require('../models/entregaModel');
+const moment = require('moment-timezone');
 
 const getEntregas = async (req, res) => {
   try {
@@ -27,8 +28,8 @@ const getEntregaByNRO = async (req, res) => {
 const createOrUpdateEntrega = async (req, res) => {
   try {
     const { NRO } = req.body;
-    const fechaEntrega = new Date().toISOString().split('T')[0];
-    const horaEntrega = new Date().toTimeString().split(' ')[0];
+    const fechaEntrega = moment().tz("America/La_Paz").format('YYYY-MM-DD');
+    const horaEntrega =  moment().tz("America/La_Paz").format('HH:mm:ss');
     const newEntrega = { ...req.body, FECHAENTREGA: fechaEntrega, HORAENTREGA: horaEntrega };
 
     if (NRO) {
