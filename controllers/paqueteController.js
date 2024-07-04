@@ -10,6 +10,19 @@ const getPaquetes = async (req, res) => {
     res.status(500).json({ error: 'Error al obtener paquetes' });
   }
 };
+const getPaqueteById = async (req, res) => {
+  try {
+    const paquete = await paqueteModel.getPaqueteById(req.params.codigo);
+    if (!paquete) {
+      return res.status(404).json({ error: 'Paquete no encontrado' });
+    }
+    res.json(paquete);
+  } catch (error) {
+    console.error('Error al obtener paquete por código:', error);
+    res.status(500).json({ error: 'Error al obtener paquete por código' });
+  }
+};
+
 
 const createPaquete = async (req, res) => {
   try {
@@ -81,4 +94,5 @@ module.exports = {
   getTiposPaquete,
   addTipoPaqueteToPaquete,
   removeTipoPaqueteFromPaquete,
+  getPaqueteById,
 };

@@ -19,18 +19,24 @@ const getPlanRutaById = async (id) => {
 };
 
 const createPlanRuta = async (planRuta) => {
-  const { id, nombreLocalidad, nombreDepartamento, fechaSalidaEsperada, horaSalidaEsperada, fechaLlegadaEsperada, horaLlegadaEsperada } = planRuta;
+  const { id, nombreLocalidad, nombreDepartamento, fechaSalidaEsperada, horaSalidaEsperada, fechaLlegadaEsperada, horaLlegadaEsperada, localidadDestino, departamentoDestino } = planRuta;
   try {
-    await pool.query('INSERT INTO PLANRUTA (ID, NOMBRELOCALIDAD, NOMBREDEPARTAMENTO, FECHASALIDAESPERADA, HORASALIDAESPERADA, FECHALLEGADAESPERADA, HORALLEGADAESPERADA) VALUES (?, ?, ?, ?, ?, ?, ?)', [id, nombreLocalidad, nombreDepartamento, fechaSalidaEsperada, horaSalidaEsperada, fechaLlegadaEsperada, horaLlegadaEsperada]);
+    await pool.query(
+      'INSERT INTO PLANRUTA (ID, NOMBRELOCALIDAD, NOMBREDEPARTAMENTO, FECHASALIDAESPERADA, HORASALIDAESPERADA, FECHALLEGADAESPERADA, HORALLEGADAESPERADA, LOCALIDADDESTINO, DEPARTAMENTODESTINO) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+      [id, nombreLocalidad, nombreDepartamento, fechaSalidaEsperada, horaSalidaEsperada, fechaLlegadaEsperada, horaLlegadaEsperada, localidadDestino, departamentoDestino]
+    );
   } catch (error) {
     throw new Error(error.message);
   }
 };
 
 const updatePlanRuta = async (id, planRuta) => {
-  const { nombreLocalidad, nombreDepartamento, fechaSalidaEsperada, horaSalidaEsperada, fechaLlegadaEsperada, horaLlegadaEsperada } = planRuta;
+  const { nombreLocalidad, nombreDepartamento, fechaSalidaEsperada, horaSalidaEsperada, fechaLlegadaEsperada, horaLlegadaEsperada, localidadDestino, departamentoDestino } = planRuta;
   try {
-    await pool.query('UPDATE PLANRUTA SET NOMBRELOCALIDAD = ?, NOMBREDEPARTAMENTO = ?, FECHASALIDAESPERADA = ?, HORASALIDAESPERADA = ?, FECHALLEGADAESPERADA = ?, HORALLEGADAESPERADA = ? WHERE ID = ?', [nombreLocalidad, nombreDepartamento, fechaSalidaEsperada, horaSalidaEsperada, fechaLlegadaEsperada, horaLlegadaEsperada, id]);
+    await pool.query(
+      'UPDATE PLANRUTA SET NOMBRELOCALIDAD = ?, NOMBREDEPARTAMENTO = ?, FECHASALIDAESPERADA = ?, HORASALIDAESPERADA = ?, FECHALLEGADAESPERADA = ?, HORALLEGADAESPERADA = ?, LOCALIDADDESTINO = ?, DEPARTAMENTODESTINO = ? WHERE ID = ?',
+      [nombreLocalidad, nombreDepartamento, fechaSalidaEsperada, horaSalidaEsperada, fechaLlegadaEsperada, horaLlegadaEsperada, localidadDestino, departamentoDestino, id]
+    );
   } catch (error) {
     throw new Error(error.message);
   }

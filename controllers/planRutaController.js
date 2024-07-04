@@ -43,7 +43,7 @@ const createPlanRuta = async (req, res) => {
       FECHA: fecha,
       HORAACCION: hora,
       ELEMENTOMODIFICADO: 'CREACION DE PLAN DE RUTA',
-      DETALLE: `Plan de ruta creado: ${newPlanRuta.nombre}`
+      DETALLE: `Plan de ruta creado: ${newPlanRuta.nombreLocalidad} a ${newPlanRuta.localidadDestino}`
     };
     const registroId = await addRegistro(registro);
     const io = getIO();
@@ -72,7 +72,7 @@ const updatePlanRuta = async (req, res) => {
       FECHA: fecha,
       HORAACCION: hora,
       ELEMENTOMODIFICADO: 'MODIFICACION DE PLAN DE RUTA',
-      DETALLE: `Plan de ruta actualizado: ${id} - ${updatedPlanRuta.nombre}`
+      DETALLE: `Plan de ruta actualizado: ${id} - ${updatedPlanRuta.nombreLocalidad} a ${updatedPlanRuta.localidadDestino}`
     };
     const registroId = await addRegistro(registro);
     const io = getIO();

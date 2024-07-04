@@ -5,6 +5,8 @@ const paqueteController = require('../controllers/paqueteController');
 
 router.get('/', paqueteController.getPaquetes);
 router.post('/', paqueteController.createPaquete);
+router.get('/:codigo', paqueteController.getPaqueteById);
+
 router.put('/:codigo', paqueteController.updatePaquete);
 router.delete('/:codigo', paqueteController.deletePaquete);
 router.get('/:codigoPaquete/tipos', paqueteController.getTiposPaquete);
