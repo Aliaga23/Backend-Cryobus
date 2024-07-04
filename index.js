@@ -39,6 +39,7 @@ const entregaRoutes  =require('./routes/entregaRoutes');
 const reporteEntregaRoutes = require('./routes/reporteEntregaRoutes');
 const reporteTrasladoRoutes =require('./routes/reporteTrasladoRoutes');
 const registrarSalidaRoutes =require('./routes/registrarSalidaRoutes')
+const registrarLlegadaRoutes =require('./routes/registrarLlegadaRoutes')
 
 const app = express();
 const server = http.createServer(app);
@@ -94,6 +95,7 @@ app.use('/api/entregas', entregaRoutes);
 app.use('/api/notas-entrega', reporteEntregaRoutes);
 app.use('/api/notas-traslado', reporteTrasladoRoutes);
 app.use('/api/registrarsalida',registrarSalidaRoutes);
+app.use('/api/registrarllegada',registrarLlegadaRoutes);
 
 // Ruta de prueba
 app.get('/ping', async (req, res) => {
