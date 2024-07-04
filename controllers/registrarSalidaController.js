@@ -1,4 +1,4 @@
-// controllers/notaTrasladoController.js
+// controllers/registrarSalidaController.js
 
 const NotaTrasladoModel = require('../models/registrarSalidaModel');
 
@@ -28,7 +28,6 @@ const getNotasTraslado = async (req, res) => {
     res.status(500).json({ error: 'Error al obtener las notas de traslado' });
   }
 };
-
 
 module.exports = {
   registrarSalidaPaquete,
