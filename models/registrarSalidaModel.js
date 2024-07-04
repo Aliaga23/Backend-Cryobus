@@ -19,10 +19,12 @@ const updateSalidaPaquete = async (data) => {
   const { fechaSalida, horaSalida } = getBoliviaDateTime();
 
   try {
+    // Actualizar la fila que no tiene FECHASALIDAPAQUETE y HORASALIDAPAQUETE
     const [result] = await pool.query(
-      'UPDATE NOTATRASLADO SET CONDUCTOR = ?, ROLCONDUCTOR = ?, CAMION = ?, FECHASALIDAPAQUETE = ?, HORASALIDAPAQUETE = ? WHERE CODIGOPAQUETE = ?',
-      [conductor, rolConductor, camion, fechaSalida, horaSalida, codigoPaquete]
+      'UPDATE NOTATRASLADO SET CONDUCTOR = ?, ROLCONDUCTOR = ?, CAMION = ?, CODIGOPAQUETE = ?, FECHASALIDAPAQUETE = ?, HORASALIDAPAQUETE = ? WHERE FECHASALIDAPAQUETE IS NULL AND HORASALIDAPAQUETE IS NULL LIMIT 1',
+      [conductor, rolConductor, camion, codigoPaquete, fechaSalida, horaSalida]
     );
+
     return result;
   } catch (error) {
     throw new Error(error.message);
