@@ -36,7 +36,7 @@ const { setIO } = require('./controllers/socketController'); // Nuevo controlado
 const reembolsoRoutes = require('./routes/reembolsoRoutes');
 const celularClienteRoutes =require('./routes/celularClienteRoutes');
 const entregaRoutes  =require('./routes/entregaRoutes');
-
+const reporteEntregaRoutes = require('./routes/reporteEntregaRoutes');
 
 const app = express();
 const server = http.createServer(app);
@@ -89,6 +89,7 @@ app.use('/api/celulares', celularClienteRoutes);
 
 app.use('/api/entregas', entregaRoutes);
 
+app.use('/api/notas-entrega', reporteEntregaRoutes);
 
 
 // Ruta de prueba
