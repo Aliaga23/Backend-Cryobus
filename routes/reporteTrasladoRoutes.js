@@ -1,5 +1,5 @@
 const express = require('express');
-const { fetchAllNotasTraslado, createNotaTraslado } = require('../controllers/notaTrasladoController');
+const { fetchAllNotasTraslado, createNotaTraslado } = require('../controllers/reporteTrasladoController');
 
 const router = express.Router();
 
