@@ -38,6 +38,7 @@ const getAllNotasEntrega = async () => {
         rc.ROL AS RolConductor,
         cam.NRO AS CamionNumero,
         tc.NOMBRE AS TipoCamion,
+        nt.NRO AS NotaTrasladoNumero,
         nt.FECHALLEGADA AS NotaTrasladoFechaLlegada,
         nt.HORALLEGADA AS NotaTrasladoHoraLlegada,
         nt.FECHASALIDA AS NotaTrasladoFechaSalida,
@@ -45,7 +46,17 @@ const getAllNotasEntrega = async () => {
         nt.FECHALLEGADAPAQUETE,
         nt.HORALLEGADAPAQUETE,
         nt.FECHASALIDAPAQUETE,
-        nt.HORASALIDAPAQUETE
+        nt.HORASALIDAPAQUETE,
+        pR.LOCALIDADDESTINO,
+        pR.DEPARTAMENTODESTINO,
+        dir.NOMBREDEPARTAMENTO,
+        dir.NOMBRELOCALIDAD,
+        dir.ID AS DireccionID,
+        dtp.IDTIPOPAQUETE,
+        tp.NOMBRE AS TipoPaqueteNombre,
+        it.DESCRIPCION AS ItemDescripcion,
+        it.PESOINDIVIDUAL AS ItemPeso,
+        cel.NUMERO AS ClienteCelular
       FROM 
         NOTAENTREGA ne
       LEFT JOIN 
@@ -79,7 +90,15 @@ const getAllNotasEntrega = async () => {
       LEFT JOIN 
         CAMION cam ON nt.CAMION = cam.NRO
       LEFT JOIN 
-        TIPOCAMION tc ON cam.IDTIPOCAMION = tc.ID;
+        TIPOCAMION tc ON cam.IDTIPOCAMION = tc.ID
+      LEFT JOIN 
+        DETALLETIPOPAQUETE dtp ON pa.CODIGO = dtp.CODIGOPAQUETE
+      LEFT JOIN 
+        TIPOPAQUETE tp ON dtp.IDTIPOPAQUETE = tp.ID
+      LEFT JOIN 
+        ITEM it ON pa.CODIGO = it.CODIGOPAQUETE
+      LEFT JOIN 
+        CELULARCLIENTE cel ON clienteEnv.CODIGO = cel.CODIGOCLIENTE;
     `);
     return rows;
   } catch (error) {
