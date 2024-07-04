@@ -37,6 +37,8 @@ const reembolsoRoutes = require('./routes/reembolsoRoutes');
 const celularClienteRoutes =require('./routes/celularClienteRoutes');
 const entregaRoutes  =require('./routes/entregaRoutes');
 const reporteEntregaRoutes = require('./routes/reporteEntregaRoutes');
+const reporteTrasladoRoutes =require('./routes/reporteTrasladoRoutes');
+
 
 const app = express();
 const server = http.createServer(app);
@@ -90,6 +92,7 @@ app.use('/api/celulares', celularClienteRoutes);
 app.use('/api/entregas', entregaRoutes);
 
 app.use('/api/notas-entrega', reporteEntregaRoutes);
+app.use('/api/notas-traslado', reporteTrasladoRoutes);
 
 
 // Ruta de prueba
